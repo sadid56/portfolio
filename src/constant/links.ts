@@ -1,7 +1,7 @@
 import { cloudinaryImageApi, cloudinaryVideoApi } from "@/lib/cloudinaryApi";
 
 const LINKS = {
-  resume: "https://drive.google.com/file/d/1sUcGjcADyUlUZoacE3s-UNE88dZsMdgq/view?usp=sharing",
+  resume: "https://drive.google.com/file/d/162GlYmVE-hL-oigbHO_wQmcMmJ9XuxRa/view?usp=sharing",
 
   // social
   github: "https://github.com/sadid56/",

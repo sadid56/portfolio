@@ -125,7 +125,7 @@ const Hero = () => {
             duration: 0.8,
             ease: "power2.out",
           },
-          0
+          0,
         );
 
         tl.to(
@@ -137,7 +137,7 @@ const Hero = () => {
             duration: 0.7,
             ease: "power2.inOut",
           },
-          0.8
+          0.8,
         );
 
         // Final blur stage
@@ -150,7 +150,7 @@ const Hero = () => {
             duration: 0.8,
             ease: "power2.in",
           },
-          1.5
+          1.5,
         );
 
         tl.to(
@@ -171,7 +171,7 @@ const Hero = () => {
             duration: 1.5,
             ease: "power2.inOut",
           },
-          0
+          0,
         );
 
         if (socialEls.length > 0) {
@@ -183,7 +183,7 @@ const Hero = () => {
               duration: 1.2,
               ease: "power3.inOut",
             },
-            0.5
+            0.5,
           );
         }
 
@@ -195,7 +195,7 @@ const Hero = () => {
             duration: 1.2,
             ease: "power3.inOut",
           },
-          0.5
+          0.5,
         );
 
         // Combine movement with blur so they don't look stuck
@@ -208,7 +208,7 @@ const Hero = () => {
             duration: 2,
             ease: "power2.inOut",
           },
-          0
+          0,
         );
 
         tl.to(
@@ -220,7 +220,7 @@ const Hero = () => {
             duration: 2,
             ease: "power2.inOut",
           },
-          0
+          0,
         );
 
         tl.to(
@@ -243,7 +243,7 @@ const Hero = () => {
               });
             },
           },
-          2.3
+          2.3,
         );
 
         tl.to(
@@ -253,7 +253,7 @@ const Hero = () => {
             ease: "power2.in",
             duration: 1.5,
           },
-          3.2
+          3.2,
         );
 
         tl.to(
@@ -262,7 +262,7 @@ const Hero = () => {
             opacity: 0,
             duration: 1,
           },
-          3.4
+          3.4,
         );
 
         // Floating icons gentle animation
@@ -297,7 +297,7 @@ const Hero = () => {
           gsap.killTweensOf(floatingIcons);
         };
       },
-      containerRef
+      containerRef,
     );
 
     return () => {
@@ -345,7 +345,7 @@ const Hero = () => {
                 ref={idx === 2 ? dLetterRef : null}
                 className={cn(
                   "inline-block mx-1 bg-linear-to-r from-white via-slate-300 to-slate-400 bg-clip-text text-transparent",
-                  "cursor-default"
+                  "cursor-default",
                 )}
                 style={
                   idx === 2
@@ -365,8 +365,8 @@ const Hero = () => {
 
         {/* Description */}
         <div className='text-slate-300 font-poppins font-normal max-w-[700px] mb-6 GradualSpacing'>
-          Passionate {<FlipWords words={words} />} specializing in React, Next.js, Node.js, PostgreSQL and TypeScript. I love someone who
-          loves programming and is eager to learn.
+          Passionate {<FlipWords words={words} />} specializing in React, Next.js, Node.js, PostgreSQL, and TypeScript, with a strong focus
+          on clean code, scalability, and continuous learning.
         </div>
 
         {/* CTA Buttons */}
@@ -375,7 +375,7 @@ const Hero = () => {
             onClick={(e) => handleScroll(e, "#projects")}
             className={cn(
               "group relative h-12 px-8 bg-slate-800/40 backdrop-blur-xl border border-sky-500/20 outline-none cursor-pointer font-montserrat rounded-xl font-semibold tracking-wide transition-all duration-500 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.25)] hover:-translate-y-1 flex items-center gap-2 text-sky-100 overflow-hidden focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:ring-offset-2 focus:ring-offset-slate-950",
-              isScroll ? "z-[-1]" : "z-1"
+              isScroll ? "z-[-1]" : "z-1",
             )}
           >
             <span className='absolute inset-0 bg-linear-to-r from-transparent via-sky-400/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700'></span>
@@ -387,7 +387,7 @@ const Hero = () => {
             href={LINKS.resume}
             className={cn(
               "group relative h-12 px-8 bg-sky-500/20 backdrop-blur-xl border border-sky-400/30 outline-none cursor-pointer font-montserrat rounded-xl font-semibold tracking-wide transition-all duration-500 hover:bg-sky-500/30 hover:border-sky-400/50 hover:shadow-[0_0_25px_rgba(56,189,248,0.3)] hover:-translate-y-1 flex items-center gap-2 text-sky-100 overflow-hidden focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:ring-offset-2 focus:ring-offset-slate-950",
-              isScroll ? "z-[-1]" : "z-1"
+              isScroll ? "z-[-1]" : "z-1",
             )}
           >
             <span>Resume</span>
@@ -397,7 +397,7 @@ const Hero = () => {
       {/* Social Links */}
       <div
         className={cn(
-          "social-links-container hidden absolute bottom-4 left-1/2 -translate-x-1/2 lg:flex gap-6 md:flex-col md:fixed md:right-4 md:top-1/2 md:-translate-y-1/2 md:left-auto md:translate-x-0 h-fit"
+          "social-links-container hidden absolute bottom-4 left-1/2 -translate-x-1/2 lg:flex gap-6 md:flex-col md:fixed md:right-4 md:top-1/2 md:-translate-y-1/2 md:left-auto md:translate-x-0 h-fit",
         )}
       >
         {socialLinks.map(({ Icon, href, label, color }) => (
