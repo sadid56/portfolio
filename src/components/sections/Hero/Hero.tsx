@@ -316,17 +316,17 @@ const Hero = () => {
       <div ref={revealRef} className='absolute inset-0 z-50 bg-mainBgColor' style={{ clipPath: "circle(0% at 50% 50%)" }}>
         <Skills />
       </div>
-      <div className='absolute inset-0 z-0 blur-target'>
-        <div className='absolute top-1/3 -right-20 w-96 h-96 bg-linear-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl float-slow'></div>
+      <div className='absolute hidden lg:block inset-0 z-0 blur-target'>
+        <div className='absolute -top-20 -right-20 w-[24rem] h-[24rem] bg-linear-to-br from-cyan-300/8 via-blue-400/6 to-transparent rounded-full blur-3xl float-slow'></div>
       </div>
-      <div className='absolute inset-0 z-0 blur-target bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(ellipse_60%_50%_at_50%_50%,black_20%,transparent_100%)]'></div>
+      <div className='absolute inset-0 z-0 blur-target bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(ellipse_70%_60%_at_20%_50%,black_30%,transparent_100%)]'></div>
 
       {/* Background Portrait Overlay */}
       <div ref={portraitRef} className='absolute inset-0 z-0 pointer-events-none overflow-hidden'>
         <div
-          className='absolute right-[10%] md:right-[40%] bottom-[40%] md:-bottom-[20%] w-full h-[130%] bg-no-repeat bg-bottom-right bg-contain opacity-[0.08]'
+          className='absolute right-[10%] md:right-[40%] bottom-[40%] md:-bottom-[20%] w-full h-[130%] bg-no-repeat bg-bottom-right bg-contain opacity-20 md:opacity-15 lg:opacity-13'
           style={{
-            backgroundImage: "url('/images/v3.png')",
+            backgroundImage: "url('/hero.png')",
             maskImage: "linear-gradient(to left, black 20%, transparent 80%), linear-gradient(to top, black 20%, transparent 80%)",
             WebkitMaskImage: "linear-gradient(to left, black 20%, transparent 80%), linear-gradient(to top, black 100%, transparent 100%)",
             maskComposite: "intersect",
@@ -338,7 +338,7 @@ const Hero = () => {
       <Container className='relative z-30 pb-20 pr-4 lg:pr-28 2xl:pr-0 h-full flex flex-col justify-end items-end text-right'>
         {/* Name */}
         <div ref={nameRef} className='mb-6'>
-          <h1 className='text-[90px] leading-[90%] md:text-[130px] lg:text-[150px] xl:text-[210px] font-montserrat uppercase font-black select-none'>
+          <h1 className='text-[70px] sm:text-[80px] leading-[90%] md:text-[130px] lg:text-[150px] xl:text-[210px] font-montserrat uppercase font-black select-none'>
             {"Sadid".split("").map((letter, idx) => (
               <span
                 key={idx}

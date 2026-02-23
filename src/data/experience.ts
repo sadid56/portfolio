@@ -2,6 +2,20 @@ import { TExperience } from "@/types/experienceTypes";
 
 const EXPERIENCE: TExperience[] = [
   {
+    id: "exp-3",
+    role: "Full Stack Web Developer",
+    company: "Sitgram",
+    location: "On-site · Rajshahi, Bangladesh",
+    period: "17 Feb, 2026 - Present",
+    tech: ["Next.js", "Node.js", "PostgreSQL", "Docker", "System Design"],
+    website: "https://sitgram.com",
+    highlights: [
+      "Building and maintaining full-stack web applications with a strong focus on performance and scalability.",
+      "Designing backend services and database architecture to support reliable, production-grade features.",
+      "Collaborating across product and engineering teams to deliver clean, maintainable solutions.",
+    ],
+  },
+  {
     id: "exp-2",
     role: "Full Stack Developer",
     company: "Team",

@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "../styles/globals.css";
 import { ReactLenis } from "@/utils/lenis";
 import { Montserrat, Poppins } from "next/font/google";
 import { cn } from "@/lib/cn";
+import Script from "next/script";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -18,9 +19,87 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
+const siteUrl = "https://sadid.vercel.app";
+const siteName = "Sadid Portfolio";
+const defaultTitle = "Sadid | Full-Stack Web Developer";
+const defaultDescription =
+  "Full-stack web developer specializing in Next.js, React, Node.js, and PostgreSQL. Explore projects, experience, and contact information.";
+
 export const metadata: Metadata = {
-  title: "Sadid - Let's Build Something Amazing Together!",
-  description: "Let's code! 😊",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: defaultTitle,
+    template: "%s | Sadid",
+  },
+  description: defaultDescription,
+  applicationName: siteName,
+  keywords: [
+    "Sadid",
+    "Full Stack Web Developer",
+    "Next.js Developer",
+    "React Developer",
+    "Node.js Developer",
+    "PostgreSQL",
+    "Portfolio",
+    "Bangladesh Developer",
+  ],
+  authors: [{ name: "Sadid", url: siteUrl }],
+  creator: "Sadid",
+  publisher: "Sadid",
+  category: "technology",
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName,
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Sadid Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/logo.png"],
+    creator: "@sadid56",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  // verification: {
+  //   google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  // },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#020617",
 };
 
 export default function RootLayout({
@@ -28,6 +107,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Sadid",
+    url: siteUrl,
+    image: `${siteUrl}/logo.png`,
+    jobTitle: "Full-Stack Web Developer",
+    sameAs: ["https://github.com/sadid56/", "https://www.linkedin.com/in/mr-sadid/", "https://www.facebook.com/sadidhasanx/"],
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteName,
+    url: siteUrl,
+    description: defaultDescription,
+    inLanguage: "en",
+  };
+
   return (
     <html lang='en'>
       <ReactLenis
@@ -39,7 +137,11 @@ export default function RootLayout({
         }}
         root
       >
-        <body className={cn(montserrat.variable, poppins.variable, "antialiased")}>{children}</body>
+        <body className={cn(montserrat.variable, poppins.variable, "antialiased")}>
+          <Script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
+          <Script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+          {children}
+        </body>
       </ReactLenis>
     </html>
   );
