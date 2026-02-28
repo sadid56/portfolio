@@ -19,7 +19,7 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-const siteUrl = "https://sadid.vercel.app";
+const siteUrl = "https://sadidx.me";
 const siteName = "Sadid Portfolio";
 const defaultTitle = "Sadid | Full-Stack Web Developer";
 const defaultDescription =
@@ -42,6 +42,7 @@ export const metadata: Metadata = {
     "PostgreSQL",
     "Portfolio",
     "Bangladesh Developer",
+    "Dream Coder",
   ],
   authors: [{ name: "Sadid", url: siteUrl }],
   creator: "Sadid",
@@ -90,9 +91,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  // verification: {
-  //   google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-  // },
+  verification: {
+    google: "google-site-verification=AyiIcHGh9iPpeyrSX5XSbt1vLUZFjtYh_4tnC5Yl9TA",
+  },
 };
 
 export const viewport: Viewport = {
@@ -127,7 +128,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <ReactLenis
         options={{
           duration: 1.1,
