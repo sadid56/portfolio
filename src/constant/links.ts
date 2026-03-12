@@ -8,7 +8,7 @@ const LINKS = {
   facebook: "https://www.facebook.com/sadidhasanx/",
   discord: "https://discord.com/users/1151169623149002752/",
   linkedIn: "https://www.linkedin.com/in/mr-sadid/",
-  blog: "https://nexg-lab.vercel.app/",
+  blog: "https://blog.sadidx.me",
 
   olynex: "https://olynex.com",
 
@@ -27,7 +27,7 @@ const LINKS = {
   drivepulse_thumnail: `${cloudinaryImageApi}/v1767101404/portfolio/projects/drivepulse-thumbnail_objnnu.png`,
 
   // nexg_lab
-  nexg_lab: "https://nexg-lab.vercel.app/",
+  nexg_lab: "https://blog.sadidx.me",
   nexg_lab_video: `${cloudinaryVideoApi}/v1767102299/portfolio/videos/nexg_lab_wywpmz.mp4`,
   nexg_lab_thumnail: `${cloudinaryImageApi}//v1767102011/portfolio/projects/nexg_lab-thumbnail_efpp0e.png`,
   nexg_github: "https://github.com/sadid56/nexg-lab",
