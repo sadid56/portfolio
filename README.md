@@ -6,7 +6,7 @@ This repository contains the source code for my personal portfolio website, wher
 
 ### 🌐 Live Preview
 
-🔗 Portfolio: https://sadid.vercel.app
+🔗 Portfolio: https://sadidx.me
 
 ### 🛠 Tech Stack
 
