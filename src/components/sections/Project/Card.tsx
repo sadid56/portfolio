@@ -1,5 +1,4 @@
 "use client";
-import { LinkPreview } from "@/components/ui/LinkPreview";
 import { IconBrandGithub, IconPlayerPlay, IconServer, IconWorld } from "@tabler/icons-react";
 import BoxReveal from "@/components/ui/BoxReveal";
 import Link from "next/link";
@@ -118,28 +117,39 @@ const Card = ({ project, onPlayVideo }: { project: any; onPlayVideo: () => void 
           <div className='flex items-center justify-between mt-auto pt-4 border-t border-white/8'>
             <div className='flex gap-3 md:gap-4'>
               {project?.client_github_link && (
-                <LinkPreview url={project?.client_github_link}>
-                  <div className='text-slate-500 hover:text-[#03e8f4] transition-all duration-300 transform hover:scale-110'>
-                    <IconBrandGithub className='size-5' />
-                  </div>
-                </LinkPreview>
+                <Link
+                  href={project.client_github_link}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-slate-500 hover:text-[#03e8f4] transition-all duration-300 transform hover:scale-110'
+                  aria-label='Client GitHub Repository'
+                >
+                  <IconBrandGithub className='size-5' />
+                </Link>
               )}
               {project?.server_github_link && (
-                <LinkPreview url={project?.server_github_link}>
-                  <div className='text-slate-500 hover:text-[#03e8f4] transition-all duration-300 transform hover:scale-110'>
-                    <IconServer className='size-5' />
-                  </div>
-                </LinkPreview>
+                <Link
+                  href={project.server_github_link}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-slate-500 hover:text-[#03e8f4] transition-all duration-300 transform hover:scale-110'
+                  aria-label='Server GitHub Repository'
+                >
+                  <IconServer className='size-5' />
+                </Link>
               )}
             </div>
 
             {project?.live_link && (
-              <LinkPreview url={project?.live_link}>
-                <div className='flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 rounded-full transition-all duration-500 font-semibold text-[10px] md:text-sm group/btn bg-white/5 text-white hover:bg-white/10 border border-white/10'>
-                  <span className='tracking-wide'>Live Preview</span>
-                  <IconWorld className='size-3.5 md:size-4 group-hover/btn:rotate-12 transition-transform' />
-                </div>
-              </LinkPreview>
+              <Link
+                href={project.live_link}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 rounded-full transition-all duration-500 font-semibold text-[10px] md:text-sm group/btn bg-white/5 text-white hover:bg-white/10 border border-white/10'
+              >
+                <span className='tracking-wide'>Live Preview</span>
+                <IconWorld className='size-3.5 md:size-4 group-hover/btn:rotate-12 transition-transform' />
+              </Link>
             )}
           </div>
         </div>

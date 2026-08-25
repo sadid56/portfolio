@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "../styles/globals.css";
-import { ReactLenis } from "@/utils/lenis";
+import { SmoothScroll } from "@/utils/lenis";
 import { Montserrat, Poppins } from "next/font/google";
 import { cn } from "@/lib/cn";
 import Script from "next/script";
@@ -129,21 +129,13 @@ export default function RootLayout({
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <ReactLenis
-        options={{
-          duration: 1.1,
-          lerp: 0.1,
-          wheelMultiplier: 1.5,
-          touchMultiplier: 2,
-        }}
-        root
-      >
-        <body className={cn(montserrat.variable, poppins.variable, "antialiased")}>
+      <body className={cn(montserrat.variable, poppins.variable, "antialiased")}>
+        <SmoothScroll>
           <Script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
           <Script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
           {children}
-        </body>
-      </ReactLenis>
+        </SmoothScroll>
+      </body>
     </html>
   );
 }

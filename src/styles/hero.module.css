@@ -1,18 +1,79 @@
 
 
-.arrow {
-  width: 0px;
-  height: 60px;
-  border: 1px solid #90a1b9;
-  position: relative;
-  &::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 100%;
-    left: -4.5px;
-    border-top: 10px solid #90a1b9;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
+.scrollWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.scrollWrapper:hover {
+  opacity: 1;
+}
+
+.scrollText {
+  font-size: 9px;
+  font-family: var(--font-montserrat), sans-serif;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.scrollMouse {
+  width: 20px;
+  height: 34px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15), inset 0 0 8px rgba(255, 255, 255, 0.05);
+}
+
+.scrollWheel {
+  width: 3px;
+  height: 6px;
+  background: #38bdf8;
+  border-radius: 9999px;
+  box-shadow: 0 0 8px #38bdf8, 0 0 12px rgba(56, 189, 248, 0.8);
+  animation: scrollAnim 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(56, 189, 248, 0.8), transparent);
+  animation: linePulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollAnim {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(14px);
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes linePulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scaleY(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.1);
   }
 }
