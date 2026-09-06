@@ -30,15 +30,15 @@ const Card = ({ project, onPlayVideo }: { project: any; onPlayVideo: () => void 
 
   return (
     <div
-      className='rounded-2xl p-px md:p-0.5 relative overflow-hidden h-full w-full shadow-2xl transition-all duration-500 group/card'
+      className='rounded-2xl p-px md:p-0.5 relative overflow-hidden h-full w-full shadow-2xl group/card'
       style={{
         background: borderGradient,
       }}
     >
       {/* Static Glassy Highlight Overlay */}
-      <div className='absolute inset-0 bg-white/5 opacity-40 mix-blend-overlay pointer-events-none' />
+      <div className='absolute inset-0 bg-white/[0.04] pointer-events-none' />
 
-      <div className='flex flex-col md:flex-row gap-4 md:gap-7 rounded-2xl h-full bg-[#0a0a0a] shadow-inner p-4 relative z-10 overflow-hidden transition-all duration-500 group-hover/card:bg-[#0d0d0d]'>
+      <div className='flex flex-col md:flex-row gap-4 md:gap-7 rounded-2xl h-full bg-[#0a0a0a] shadow-inner p-4 relative z-10 overflow-hidden transition-colors duration-300 group-hover/card:bg-[#0d0d0d]'>
         {/* Subtle static inner glow */}
         <div className='absolute inset-0 bg-linear-to-br from-white/2 to-transparent pointer-events-none' />
 

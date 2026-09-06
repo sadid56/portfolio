@@ -126,3 +126,10 @@
   stroke-dasharray: 20 300;
   stroke-dashoffset: -32.42;
 }
+
+@media (min-width: 768px) {
+  .project-track {
+    padding-left: calc(50vw - min(425px, 42.5vw));
+    padding-right: calc(50vw - min(425px, 42.5vw));
+  }
+}

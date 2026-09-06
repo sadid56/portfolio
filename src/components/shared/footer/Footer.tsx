@@ -1,23 +1,62 @@
 "use client";
 
 import { useRef } from "react";
+import { IconBrandGithub, IconArrowUpRight, IconBrandLinkedin } from "@tabler/icons-react";
+import LINKS from "@/constant/links";
 
 const Footer = () => {
   const containerRef = useRef(null);
 
   return (
-    <footer className='relative w-full overflow-hidden '>
-      <div ref={containerRef} className='relative z-10 flex pt-24 pb-12 items-center justify-center'>
+    <footer className='relative w-full overflow-hidden'>
+      <div ref={containerRef} className='relative z-30 flex pt-24 pb-12 items-center justify-center'>
         <div className='w-full px-4'>
           <div className='relative'>
             <div className='relative text-center'>
-              <div className='relative inline-block group'>
-                <div className='absolute -inset-x-8 -inset-y-4  transition-all duration-1000' />
-                <p className='relative text-xl md:text-2xl font-light tracking-[0.3em] uppercase'>
+              <div className='relative inline-block'>
+                <p className='relative text-xl md:text-2xl font-light tracking-[0.3em] uppercase select-none'>
                   <span className='bg-linear-to-r from-sky-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent'>
                     Developer & Creator
                   </span>
                 </p>
+
+                {/* Minimal Footer Links */}
+                <div className='relative z-30 mt-6 flex items-center justify-center gap-3 md:gap-5 text-xs md:text-sm font-medium text-neutral-400'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={LINKS.blog}
+                    className='group/link relative z-30 cursor-pointer py-1.5 px-2 flex items-center gap-1 hover:text-white transition-colors duration-200'
+                  >
+                    <span>Blogs</span>
+                    <IconArrowUpRight className='size-3.5 text-neutral-500 group-hover/link:text-neutral-300 transition-colors' />
+                  </a>
+
+                  <span className='w-1 h-1 rounded-full bg-neutral-700 select-none' />
+
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={LINKS.github}
+                    className='group/link relative z-30 cursor-pointer py-1.5 px-2 flex items-center gap-1.5 hover:text-white transition-colors duration-200'
+                  >
+                    <IconBrandGithub className='size-3.5 text-neutral-400 group-hover/link:text-white transition-colors' />
+                    <span>GitHub</span>
+                  </a>
+
+                  <span className='w-1 h-1 rounded-full bg-neutral-700 select-none' />
+
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={LINKS.linkedIn}
+                    className='group/link relative z-30 cursor-pointer py-1.5 px-2 flex items-center gap-1.5 hover:text-white transition-colors duration-200'
+                  >
+                    <IconBrandLinkedin className='size-3.5 text-neutral-400 group-hover/link:text-white transition-colors' />
+                    <span>LinkedIn</span>
+                  </a>
+                </div>
+
                 <div className='mt-8 flex items-center justify-center gap-6 opacity-60'>
                   <div className='h-px w-12 bg-linear-to-r from-transparent to-sky-500/50' />
                   <span className='text-[10px] text-sky-200/50 tracking-widest uppercase text-nowrap'>Crafting with Passion</span>

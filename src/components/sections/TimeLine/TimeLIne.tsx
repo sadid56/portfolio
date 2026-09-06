@@ -1,12 +1,18 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BoxReveal from "../../ui/BoxReveal";
 import "./timeline.css";
 import TimelineItem from "./TimeLineItem";
 import DockText from "../../ui/DockText";
 import Rocket from "@/components/ui/Rocket";
 import { TExperience } from "@/types/experienceTypes";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface Props {
   data: TExperience[];
@@ -20,62 +26,54 @@ export const Timeline: React.FC<Props> = ({ data }) => {
   const progressFillRef = useRef<HTMLDivElement>(null);
   const rocketRef = useRef<HTMLDivElement>(null);
 
-  // Set the height and init GSAP progress
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (typeof window === "undefined") return;
     const node = ref.current;
     if (!node) return;
     const rect = node.getBoundingClientRect();
     setHeight(rect.height);
 
-    let cleanup: (() => void) | undefined;
-    (async () => {
-      if (!containerRef.current || !progressContainerRef.current || !progressFillRef.current) return;
-      const gsapMod = await import("gsap");
-      const stMod = await import("gsap/ScrollTrigger");
-      const gsap = (gsapMod as any).gsap || (gsapMod as any).default || (gsapMod as any);
-      const ScrollTrigger = (stMod as any).ScrollTrigger || (stMod as any).default || (stMod as any);
-      if (gsap && ScrollTrigger) {
-        gsap.registerPlugin(ScrollTrigger);
-      }
-      gsap.set(progressContainerRef.current, { height: rect.height });
-      gsap.set(rocketRef.current, { rotation: 180, transformOrigin: "50% 50%", force3D: true });
+    if (!containerRef.current || !progressContainerRef.current || !progressFillRef.current) return;
 
-      const tween = gsap.fromTo(
-        progressFillRef.current,
-        { height: 0, opacity: 0 },
-        {
-          height: rect.height,
-          opacity: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 20%",
-            end: "bottom 90%",
-            scrub: true,
-            onUpdate: (self: any) => {
-              if (rocketRef.current) {
-                const targetRotation = self.direction === -1 ? 0 : 180;
-                gsap.to(rocketRef.current, {
-                  rotation: targetRotation,
-                  duration: 0.15,
-                  ease: "power2.out",
-                  overwrite: "auto",
-                  force3D: true,
-                });
-              }
-            },
+    gsap.set(progressContainerRef.current, { height: rect.height });
+    gsap.set(rocketRef.current, { rotation: 180, transformOrigin: "50% 50%", force3D: true });
+
+    const scrollParent = (containerRef.current?.closest(".overflow-y-auto") as HTMLElement) || undefined;
+
+    const tween = gsap.fromTo(
+      progressFillRef.current,
+      { height: 0, opacity: 0 },
+      {
+        height: rect.height,
+        opacity: 1,
+        ease: "none",
+        force3D: true,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          scroller: scrollParent,
+          start: "top 20%",
+          end: "bottom 90%",
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self: any) => {
+            if (rocketRef.current) {
+              const targetRotation = self.direction === -1 ? 0 : 180;
+              gsap.to(rocketRef.current, {
+                rotation: targetRotation,
+                duration: 0.15,
+                ease: "power2.out",
+                overwrite: "auto",
+                force3D: true,
+              });
+            }
           },
-        }
-      );
-      cleanup = () => {
-        if ((tween as any)?.scrollTrigger) (tween as any).scrollTrigger.kill();
-        if (tween && (tween as any).kill) (tween as any).kill();
-      };
-    })();
+        },
+      }
+    );
 
     return () => {
-      if (cleanup) cleanup();
+      tween.scrollTrigger?.kill();
+      tween.kill();
     };
   }, []);
 

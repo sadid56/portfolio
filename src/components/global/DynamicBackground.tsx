@@ -9,5 +9,13 @@ export default function DynamicBackground({ children }: { children: React.ReactN
     ["#010610", "#010610", "#010610", "#010610", "#090946", "#010610"]
   );
 
-  return <motion.div style={{ backgroundColor }}>{children}</motion.div>;
+  return (
+    <div className='relative w-full min-h-screen bg-[#010610]'>
+      <motion.div
+        className='fixed inset-0 pointer-events-none -z-50 will-change-transform'
+        style={{ backgroundColor }}
+      />
+      {children}
+    </div>
+  );
 }
