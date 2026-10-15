@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from "react";
 
 interface FuzzyTextProps {
@@ -21,13 +22,37 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
   baseIntensity = 0.18,
   hoverIntensity = 0.5,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement & { cleanupFuzzyText?: () => void }>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    let animationFrameId: number;
-    let isCancelled = false;
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    let animationFrameId = 0;
+    let isCancelled = false;
+    let isVisible = false;
+    let isHovering = false;
+    let offscreen: HTMLCanvasElement | null = null;
+    let offscreenWidth = 0;
+    let tightHeight = 0;
+    let fuzzRange = 30;
+    let interactiveLeft = 0;
+    let interactiveTop = 0;
+    let interactiveRight = 0;
+    let interactiveBottom = 0;
+
+    const noiseOffsets = new Int8Array(256);
+    let noiseCursor = 0;
+    const refillNoise = () => {
+      for (let i = 0; i < noiseOffsets.length; i++) {
+        noiseOffsets[i] = Math.floor((Math.random() - 0.5) * 60);
+      }
+    };
+    refillNoise();
 
     const init = async () => {
       if (document.fonts?.ready) {
@@ -35,28 +60,35 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       }
       if (isCancelled) return;
 
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d", { alpha: true });
       if (!ctx) return;
 
-      const computedFontFamily = fontFamily === "inherit" ? window.getComputedStyle(canvas).fontFamily || "sans-serif" : fontFamily;
+      const computedFontFamily =
+        fontFamily === "inherit"
+          ? window.getComputedStyle(canvas).fontFamily || "sans-serif"
+          : fontFamily;
 
-      const fontSizeStr = typeof fontSize === "number" ? `${fontSize}px` : fontSize;
+      const fontSizeStr =
+        typeof fontSize === "number" ? `${fontSize}px` : fontSize;
+
       let numericFontSize: number;
       if (typeof fontSize === "number") {
         numericFontSize = fontSize;
       } else {
         const temp = document.createElement("span");
         temp.style.fontSize = fontSize;
+        temp.style.position = "absolute";
+        temp.style.visibility = "hidden";
+        temp.style.pointerEvents = "none";
         document.body.appendChild(temp);
-        const computedSize = window.getComputedStyle(temp).fontSize;
-        numericFontSize = parseFloat(computedSize);
+        numericFontSize = parseFloat(window.getComputedStyle(temp).fontSize);
         document.body.removeChild(temp);
       }
 
       const text = React.Children.toArray(children).join("");
 
-      const offscreen = document.createElement("canvas");
-      const offCtx = offscreen.getContext("2d");
+      offscreen = document.createElement("canvas");
+      const offCtx = offscreen.getContext("2d", { alpha: true });
       if (!offCtx) return;
 
       offCtx.font = `${fontWeight} ${fontSizeStr} ${computedFontFamily}`;
@@ -66,16 +98,20 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       const actualLeft = metrics.actualBoundingBoxLeft ?? 0;
       const actualRight = metrics.actualBoundingBoxRight ?? metrics.width;
       const actualAscent = metrics.actualBoundingBoxAscent ?? numericFontSize;
-      const actualDescent = metrics.actualBoundingBoxDescent ?? numericFontSize * 0.2;
+      const actualDescent =
+        metrics.actualBoundingBoxDescent ?? numericFontSize * 0.2;
 
       const textBoundingWidth = Math.ceil(actualLeft + actualRight);
-      const tightHeight = Math.ceil(actualAscent + actualDescent);
+      tightHeight = Math.ceil(actualAscent + actualDescent);
 
       const extraWidthBuffer = 10;
-      const offscreenWidth = textBoundingWidth + extraWidthBuffer;
+      offscreenWidth = textBoundingWidth + extraWidthBuffer;
 
-      offscreen.width = offscreenWidth;
-      offscreen.height = tightHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      offscreen.width = offscreenWidth * dpr;
+      offscreen.height = tightHeight * dpr;
+      offCtx.scale(dpr, dpr);
 
       const xOffset = extraWidthBuffer / 2;
       offCtx.font = `${fontWeight} ${fontSizeStr} ${computedFontFamily}`;
@@ -84,95 +120,163 @@ const FuzzyText: React.FC<FuzzyTextProps> = ({
       offCtx.fillText(text, xOffset - actualLeft, actualAscent);
 
       const horizontalMargin = 50;
-      const verticalMargin = 0;
-      canvas.width = offscreenWidth + horizontalMargin * 2;
-      canvas.height = tightHeight + verticalMargin * 2;
-      ctx.translate(horizontalMargin, verticalMargin);
+      canvas.width = (offscreenWidth + horizontalMargin * 2) * dpr;
+      canvas.height = tightHeight * dpr;
+      canvas.style.width = `${offscreenWidth + horizontalMargin * 2}px`;
+      canvas.style.height = `${tightHeight}px`;
 
-      const interactiveLeft = horizontalMargin + xOffset;
-      const interactiveTop = verticalMargin;
-      const interactiveRight = interactiveLeft + textBoundingWidth;
-      const interactiveBottom = interactiveTop + tightHeight;
+      ctx.scale(dpr, dpr);
+      ctx.translate(horizontalMargin, 0);
+      ctx.imageSmoothingEnabled = false;
 
-      let isHovering = false;
-      const fuzzRange = 30;
+      interactiveLeft = horizontalMargin + xOffset;
+      interactiveTop = 0;
+      interactiveRight = interactiveLeft + textBoundingWidth;
+      interactiveBottom = tightHeight;
+
+      fuzzRange = Math.max(20, Math.min(40, tightHeight * 0.3));
+
+      const totalRows = tightHeight;
+      refillNoise();
+
+      const step = prefersReduced ? 0 : 1;
 
       const run = () => {
-        if (isCancelled) return;
-        ctx.clearRect(-fuzzRange, -fuzzRange, offscreenWidth + 2 * fuzzRange, tightHeight + 2 * fuzzRange);
+        if (isCancelled || !offscreen || !isVisible) return;
+
         const intensity = isHovering ? hoverIntensity : baseIntensity;
-        for (let j = 0; j < tightHeight; j++) {
-          const dx = Math.floor(intensity * (Math.random() - 0.5) * fuzzRange);
-          ctx.drawImage(offscreen, 0, j, offscreenWidth, 1, dx, j, offscreenWidth, 1);
+        const maxOffset = Math.floor(intensity * fuzzRange);
+
+        ctx.clearRect(
+          -fuzzRange,
+          -2,
+          offscreenWidth + fuzzRange * 2,
+          tightHeight + 4,
+        );
+
+        for (let j = 0; j < totalRows; j++) {
+          if (noiseCursor >= noiseOffsets.length - 1) {
+            refillNoise();
+            noiseCursor = 0;
+          }
+          const noiseValue = noiseOffsets[noiseCursor++] / 60;
+          const dx = Math.floor(noiseValue * maxOffset);
+          ctx.drawImage(
+            offscreen,
+            0,
+            j,
+            offscreenWidth,
+            1,
+            dx,
+            j,
+            offscreenWidth,
+            1,
+          );
         }
-        animationFrameId = window.requestAnimationFrame(run);
+
+        if (step) {
+          animationFrameId = window.requestAnimationFrame(run);
+        }
       };
 
       run();
-
-      const isInsideTextArea = (x: number, y: number) =>
-        x >= interactiveLeft && x <= interactiveRight && y >= interactiveTop && y <= interactiveBottom;
-
-      const handleMouseMove = (e: MouseEvent) => {
-        if (!enableHover) return;
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        isHovering = isInsideTextArea(x, y);
-      };
-
-      const handleMouseLeave = () => {
-        isHovering = false;
-      };
-
-      const handleTouchMove = (e: TouchEvent) => {
-        if (!enableHover) return;
-        e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
-        isHovering = isInsideTextArea(x, y);
-      };
-
-      const handleTouchEnd = () => {
-        isHovering = false;
-      };
-
-      if (enableHover) {
-        canvas.addEventListener("mousemove", handleMouseMove);
-        canvas.addEventListener("mouseleave", handleMouseLeave);
-        canvas.addEventListener("touchmove", handleTouchMove, {
-          passive: false,
-        });
-        canvas.addEventListener("touchend", handleTouchEnd);
-      }
-
-      const cleanup = () => {
-        window.cancelAnimationFrame(animationFrameId);
-        if (enableHover) {
-          canvas.removeEventListener("mousemove", handleMouseMove);
-          canvas.removeEventListener("mouseleave", handleMouseLeave);
-          canvas.removeEventListener("touchmove", handleTouchMove);
-          canvas.removeEventListener("touchend", handleTouchEnd);
-        }
-      };
-
-      canvas.cleanupFuzzyText = cleanup;
     };
+
+    const isInsideTextArea = (x: number, y: number) =>
+      x >= interactiveLeft &&
+      x <= interactiveRight &&
+      y >= interactiveTop &&
+      y <= interactiveBottom;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!enableHover || !isVisible) return;
+      const rect = canvas.getBoundingClientRect();
+      isHovering = isInsideTextArea(
+        e.clientX - rect.left,
+        e.clientY - rect.top,
+      );
+    };
+
+    const handleMouseLeave = () => {
+      isHovering = false;
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!enableHover || !isVisible) return;
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      isHovering = isInsideTextArea(
+        touch.clientX - rect.left,
+        touch.clientY - rect.top,
+      );
+    };
+
+    const handleTouchEnd = () => {
+      isHovering = false;
+    };
+
+    if (enableHover) {
+      canvas.addEventListener("mousemove", handleMouseMove);
+      canvas.addEventListener("mouseleave", handleMouseLeave);
+      canvas.addEventListener("touchstart", handleTouchStart, {
+        passive: true,
+      });
+      canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
+    }
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(animationFrameId);
+      } else if (isVisible) {
+        animationFrameId = window.requestAnimationFrame(() => {
+          init();
+        });
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          animationFrameId = window.requestAnimationFrame(() => {
+            refillNoise();
+          });
+        } else if (!isVisible) {
+          window.cancelAnimationFrame(animationFrameId);
+        }
+      },
+      { rootMargin: "100px" },
+    );
+    observer.observe(canvas);
 
     init();
 
     return () => {
       isCancelled = true;
       window.cancelAnimationFrame(animationFrameId);
-      if (canvas && canvas.cleanupFuzzyText) {
-        canvas.cleanupFuzzyText();
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      if (enableHover) {
+        canvas.removeEventListener("mousemove", handleMouseMove);
+        canvas.removeEventListener("mouseleave", handleMouseLeave);
+        canvas.removeEventListener("touchstart", handleTouchStart);
+        canvas.removeEventListener("touchend", handleTouchEnd);
       }
+      offscreen = null;
     };
-  }, [children, fontSize, fontWeight, fontFamily, color, enableHover, baseIntensity, hoverIntensity]);
+  }, [
+    fontSize,
+    fontWeight,
+    fontFamily,
+    color,
+    enableHover,
+    baseIntensity,
+    hoverIntensity,
+  ]);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} aria-label={String(children)} />;
 };
 
-export default FuzzyText;
+export default React.memo(FuzzyText);

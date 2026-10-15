@@ -1,9 +1,8 @@
-import type { Metadata, Viewport } from "next";
-import "../styles/globals.css";
-import { SmoothScroll } from "@/utils/lenis";
-import { Montserrat, Poppins } from "next/font/google";
 import { cn } from "@/lib/cn";
-import Script from "next/script";
+import { SmoothScroll } from "@/utils/smoothScroll";
+import type { Metadata, Viewport } from "next";
+import { Montserrat, Poppins } from "next/font/google";
+import "../styles/globals.css";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -20,10 +19,9 @@ const poppins = Poppins({
 });
 
 const siteUrl = "https://sadidx.me";
-const siteName = "Sadid Portfolio";
-const defaultTitle = "Sadid | Full-Stack Web Developer";
+const defaultTitle = "Sadid | Creative Full-Stack Developer & GSAP Specialist";
 const defaultDescription =
-  "Full-stack web developer specializing in Next.js, React, Node.js, and PostgreSQL. Explore projects, experience, and contact information.";
+  "Official portfolio of Sadid — Creative Full-Stack Web Developer and GSAP Animation Specialist. Building award-winning, interactive, high-performance web experiences with Next.js, React, Node.js, and GSAP.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -32,24 +30,51 @@ export const metadata: Metadata = {
     template: "%s | Sadid",
   },
   description: defaultDescription,
-  applicationName: siteName,
+  applicationName: "Sadid Portfolio",
+  generator: "Next.js",
   keywords: [
+    // Direct Identity & Brand
     "Sadid",
-    "Full Stack Web Developer",
+    "Sadid Hasan",
+    "mr-sadid",
+    "sadid56",
+    "Dream Coder",
+    "Sadid Portfolio",
+    "Sadid Developer",
+    "Sadid Web Developer",
+    // Discoverability & Best Website Searches
+    "best website",
+    "best gsap website",
+    "best developer portfolio",
+    "best portfolio website",
+    "award winning portfolio",
+    "creative developer portfolio",
+    "interactive developer portfolio",
+    "best web design",
+    "awwwards style portfolio",
+    // Technologies & Specializations
+    "GSAP Animation Specialist",
+    "GreenSock Developer",
+    "GSAP ScrollTrigger Portfolio",
     "Next.js Developer",
     "React Developer",
+    "Full Stack Web Developer",
+    "Creative Web Developer",
+    "TypeScript Developer",
     "Node.js Developer",
     "PostgreSQL",
-    "Portfolio",
+    "GSAP ScrollSmoother",
+    "Web Animation Expert",
+    "Frontend Engineer",
     "Bangladesh Developer",
-    "Dream Coder",
   ],
   authors: [{ name: "Sadid", url: siteUrl }],
   creator: "Sadid",
   publisher: "Sadid",
-  category: "technology",
+  category: "Technology & Creative Development",
+  classification: "Portfolio, Web Development, Creative Engineering",
   alternates: {
-    canonical: "/",
+    canonical: siteUrl,
   },
   icons: {
     icon: "/favicon.ico",
@@ -57,10 +82,10 @@ export const metadata: Metadata = {
     apple: "/favicon.ico",
   },
   openGraph: {
-    type: "website",
+    type: "profile",
     locale: "en_US",
     url: siteUrl,
-    siteName,
+    siteName: "Sadid | Portfolio",
     title: defaultTitle,
     description: defaultDescription,
     images: [
@@ -68,7 +93,7 @@ export const metadata: Metadata = {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "Sadid Portfolio",
+        alt: "Sadid - Creative Full-Stack Developer & GSAP Specialist",
       },
     ],
   },
@@ -92,7 +117,14 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "google-site-verification=AyiIcHGh9iPpeyrSX5XSbt1vLUZFjtYh_4tnC5Yl9TA",
+    google:
+      "google-site-verification=AyiIcHGh9iPpeyrSX5XSbt1vLUZFjtYh_4tnC5Yl9TA",
+  },
+  other: {
+    "ai-summary":
+      "Official portfolio of Sadid, a creative full-stack web developer specializing in Next.js, GSAP animations, React, Node.js, and interactive digital experiences.",
+    rating: "General",
+    "revisit-after": "7 days",
   },
 };
 
@@ -108,33 +140,144 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const personJsonLd = {
+  const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Sadid",
-    url: siteUrl,
-    image: `${siteUrl}/logo.png`,
-    jobTitle: "Full-Stack Web Developer",
-    sameAs: ["https://github.com/sadid56/", "https://www.linkedin.com/in/mr-sadid/", "https://www.facebook.com/sadidhasanx/"],
-  };
-
-  const websiteJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteName,
-    url: siteUrl,
-    description: defaultDescription,
-    inLanguage: "en",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        url: siteUrl,
+        name: "Sadid - Creative Full-Stack Developer & GSAP Specialist",
+        alternateName: [
+          "Sadid",
+          "Sadid Portfolio",
+          "Best GSAP Website",
+          "Sadid Hasan Website",
+          "Sadid Web Developer",
+        ],
+        description:
+          "The official portfolio of Sadid — Award-worthy creative full-stack web developer and GSAP animation specialist crafting ultra-smooth interactive web experiences.",
+        inLanguage: "en-US",
+        publisher: {
+          "@id": `${siteUrl}/#person`,
+        },
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": `${siteUrl}/#profilepage`,
+        url: siteUrl,
+        name: "Sadid | Portfolio & Creative Developer Profile",
+        isPartOf: {
+          "@id": `${siteUrl}/#website`,
+        },
+        about: {
+          "@id": `${siteUrl}/#person`,
+        },
+        mainEntity: {
+          "@id": `${siteUrl}/#person`,
+        },
+        description:
+          "Explore the projects, skills, animations, and journey of Sadid, a top creative full-stack developer specializing in GSAP and Next.js.",
+      },
+      {
+        "@type": "Person",
+        "@id": `${siteUrl}/#person`,
+        name: "Sadid",
+        alternateName: ["Sadid Hasan", "mr-sadid", "sadid56", "Dream Coder"],
+        url: siteUrl,
+        image: {
+          "@type": "ImageObject",
+          "@id": `${siteUrl}/#image`,
+          url: `${siteUrl}/logo.png`,
+          caption: "Sadid - Creative Full-Stack Developer",
+        },
+        jobTitle: "Creative Full-Stack Web Developer & GSAP Specialist",
+        description:
+          "Sadid is a creative full-stack web developer and GSAP animation specialist recognized for building award-worthy interactive websites, high-performance web applications with Next.js, React, Node.js, and silky-smooth GSAP animations.",
+        gender: "Male",
+        nationality: {
+          "@type": "Country",
+          name: "Bangladesh",
+        },
+        hasOccupation: {
+          "@type": "Occupation",
+          name: "Creative Full-Stack Web Developer",
+          occupationLocation: {
+            "@type": "Country",
+            name: "Bangladesh",
+          },
+          skills:
+            "Next.js, React, TypeScript, GSAP (GreenSock), ScrollTrigger, ScrollSmoother, Node.js, Express, PostgreSQL, Tailwind CSS, Web Performance",
+        },
+        knowsAbout: [
+          "GSAP (GreenSock Animation Platform)",
+          "GSAP ScrollTrigger",
+          "GSAP ScrollSmoother",
+          "Creative Web Development",
+          "Interactive Web Design",
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Node.js",
+          "PostgreSQL",
+          "Smooth Scrolling",
+          "Frontend Engineering",
+          "Full Stack Web Development",
+          "UI/UX Design",
+          "Web Performance Optimization",
+          "Award-Winning Web Experiences",
+        ],
+        sameAs: [
+          "https://github.com/sadid56",
+          "https://www.linkedin.com/in/mr-sadid/",
+          "https://www.facebook.com/sadidhasanx/",
+        ],
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": `${siteUrl}/#portfolio`,
+        name: "Sadid Portfolio Website",
+        headline: "Best GSAP Website & Interactive Developer Portfolio",
+        description:
+          "An interactive, award-winning style developer portfolio built with Next.js, TypeScript, and high-performance GSAP ScrollTrigger animations.",
+        author: {
+          "@id": `${siteUrl}/#person`,
+        },
+        creator: {
+          "@id": `${siteUrl}/#person`,
+        },
+        genre: [
+          "Creative Portfolio",
+          "Interactive Web Design",
+          "GSAP Showcase",
+        ],
+        keywords: [
+          "best website",
+          "best gsap website",
+          "creative developer",
+          "interactive web design",
+          "award winning portfolio",
+          "sadid",
+          "sadid hasan",
+        ],
+      },
+    ],
   };
 
   return (
-    <html lang='en' suppressHydrationWarning>
-      <body className={cn(montserrat.variable, poppins.variable, "antialiased")}>
-        <SmoothScroll>
-          <Script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
-          <Script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
-          {children}
-        </SmoothScroll>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          montserrat.variable,
+          poppins.variable,
+          "antialiased bg-[#010610]",
+        )}
+      >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

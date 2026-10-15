@@ -1,156 +1,133 @@
 "use client";
-import { IconBrandGithub, IconPlayerPlay, IconServer, IconWorld } from "@tabler/icons-react";
-import BoxReveal from "@/components/ui/BoxReveal";
-import Link from "next/link";
+import {
+  IconBrandGithub,
+  IconPlayerPlayFilled,
+  IconServer,
+  IconWorld,
+} from "@tabler/icons-react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import Link from "next/link";
+import { memo, useCallback } from "react";
 
-const Card = ({ project, onPlayVideo }: { project: any; onPlayVideo: () => void }) => {
-  const borderGradient = `conic-gradient(from 0deg at 50% 50%, 
-    #03e8f4 0%, 
-    rgba(3,232,244,0.3) 5%, 
-    transparent 15%, 
-    rgba(106,90,205,0.3) 22%, 
-    #6a5acd 25%, 
-    rgba(106,90,205,0.3) 28%, 
-    transparent 35%, 
-    rgba(3,232,244,0.3) 55%, 
-    #03e8f4 60%, 
-    rgba(3,232,244,0.3) 65%, 
-    transparent 70%, 
-    rgba(106,90,205,0.3) 87%, 
-    #6a5acd 90%, 
-    rgba(3,232,244,0.9) 93%
-  )`;
+export interface ProjectItem {
+  id?: number;
+  project_name: string;
+  description: string;
+  project_thumnail: string;
+  technology: string[];
+  live_link?: string;
+  video_url: string;
+  company?: {
+    name: string;
+    url?: string;
+  };
+  client_github_link?: string;
+  server_github_link?: string;
+  contributors?: Array<{
+    name: string;
+    fb?: string;
+  }>;
+}
 
-  // Limit technologies shown on mobile
-  const maxMobileTechs = 5;
-  const visibleTechs = project?.technology.slice(0, maxMobileTechs);
-  const remainingCount = project?.technology.length - maxMobileTechs;
+interface CardProps {
+  project: ProjectItem;
+  onPlayVideo: (url: string) => void;
+}
+
+const Card = ({ project, onPlayVideo }: CardProps) => {
+  const handlePlay = useCallback(() => {
+    if (project?.video_url) onPlayVideo(project.video_url);
+  }, [onPlayVideo, project?.video_url]);
 
   return (
-    <div
-      className='rounded-2xl p-px md:p-0.5 relative overflow-hidden h-full w-full shadow-2xl group/card'
-      style={{
-        background: borderGradient,
-      }}
-    >
-      {/* Static Glassy Highlight Overlay */}
-      <div className='absolute inset-0 bg-white/[0.04] pointer-events-none' />
+    <div className="group/card relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0a0a0c]">
+      {/* Top shiny border */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
 
-      <div className='flex flex-col md:flex-row gap-4 md:gap-7 rounded-2xl h-full bg-[#0a0a0a] shadow-inner p-4 relative z-10 overflow-hidden transition-colors duration-300 group-hover/card:bg-[#0d0d0d]'>
-        {/* Subtle static inner glow */}
-        <div className='absolute inset-0 bg-linear-to-br from-white/2 to-transparent pointer-events-none' />
+      <div className="relative z-10 flex flex-1 flex-col p-4 md:p-5">
+        <div className="flex flex-1 flex-col gap-4 md:flex-row md:gap-6">
+          <button
+            type="button"
+            onClick={handlePlay}
+            aria-label={`Play ${project?.project_name} video`}
+            className="group/thumb relative h-48 w-full shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] sm:h-56 md:h-full md:w-[44%]"
+          >
+            <Image
+              src={project?.project_thumnail}
+              alt={project?.project_name}
+              width={800}
+              height={600}
+              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/thumb:scale-[1.04]"
+            />
 
-        {/* Thumbnail - Improved mobile height and hover effect */}
-        <div className='w-full md:w-[42%] rounded-xl overflow-hidden relative cursor-pointer h-48 sm:h-56 md:h-full' onClick={onPlayVideo}>
-          <Image
-            src={project?.project_thumnail}
-            alt={project?.project_name}
-            width={800}
-            height={600}
-            className='w-full h-full object-cover transition-all duration-700 group-hover/card:scale-105 group-hover/card:opacity-60 ease-out rounded-xl shadow-lg'
-          />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-          <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
-            <div className='bg-white/10 backdrop-blur-md rounded-full w-14 h-14 md:w-16 md:h-16 flex items-center justify-center transform scale-90 group-hover/card:scale-100 transition-all duration-500 border border-white/20 shadow-2xl'>
-              <IconPlayerPlay className='text-white size-7 md:size-8 fill-white' />
-            </div>
-          </div>
-        </div>
-
-        <div className='md:w-[58%] flex flex-col justify-between py-1 relative z-20'>
-          <div>
-            <div className='flex justify-between items-start gap-2'>
-              <h3 className='text-lg md:text-2xl font-bold text-white font-montserrat tracking-tight leading-tight group-hover/card:text-[#03e8f4] transition-colors duration-500'>
-                <BoxReveal duration={0.8}>
-                  <span>{project?.project_name}</span>
-                </BoxReveal>
-              </h3>
-              {project?.company && (
-                <motion.div className='px-3  bg-[#03e8f4]/10 border border-[#03e8f4]/30 rounded-full flex items-center justify-center h-6'>
-                  <p className='text-[9px] uppercase tracking-[0.2em] font-black text-[#03e8f4] whitespace-nowrap mt-px'>
-                    {project.company.name}
-                  </p>
-                </motion.div>
-              )}
-            </div>
-
-            <p className='text-sm text-slate-400 mt-2 font-poppins line-clamp-2 md:line-clamp-3 leading-relaxed'>{project?.description}</p>
-
-            {/* Technologies - Limited on mobile */}
-            <div className='mt-4'>
-              <div className='flex flex-wrap gap-2'>
-                {/* Show limited techs on mobile, all on desktop */}
-                <div className='flex flex-wrap gap-2 md:hidden'>
-                  {visibleTechs.map((tech: string, i: number) => (
-                    <span
-                      key={i}
-                      className='px-2.5 py-1 bg-white/3 border border-white/10 rounded-md text-[10px] text-slate-300 font-medium hover:border-[#03e8f4]/40 hover:bg-[#03e8f4]/5 transition-all duration-300'
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {remainingCount > 0 && (
-                    <span className='px-2.5 py-1 bg-white/5 border border-white/20 rounded-md text-[10px] text-slate-400 font-medium'>
-                      +{remainingCount} more
-                    </span>
-                  )}
-                </div>
-
-                {/* Show all techs on desktop */}
-                <div className='hidden md:flex flex-wrap gap-2'>
-                  {project?.technology.map((tech: string, i: number) => (
-                    <span
-                      key={i}
-                      className='px-2.5 py-1 bg-white/3 border border-white/10 rounded-md text-xs text-slate-300 font-medium hover:border-[#03e8f4]/40 hover:bg-[#03e8f4]/5 transition-all duration-300'
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/15 backdrop-blur-md transition-all duration-300 group-hover/thumb:scale-110 group-hover/thumb:bg-white/25 md:h-14 md:w-14">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/25 to-transparent" />
+                <IconPlayerPlayFilled className="relative ml-0.5 size-4 fill-white text-white md:size-5" />
               </div>
             </div>
-          </div>
+          </button>
 
-          {/* Action buttons */}
-          <div className='flex items-center justify-between mt-auto pt-4 border-t border-white/8'>
-            <div className='flex gap-3 md:gap-4'>
-              {project?.client_github_link && (
-                <Link
-                  href={project.client_github_link}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-slate-500 hover:text-[#03e8f4] transition-all duration-300 transform hover:scale-110'
-                  aria-label='Client GitHub Repository'
+          <div className="flex flex-1 flex-col md:w-[56%]">
+            <h3 className="font-montserrat text-lg font-semibold leading-snug tracking-tight text-white md:text-xl">
+              {project?.project_name}
+            </h3>
+
+            <p className="mt-2 line-clamp-2 font-poppins text-xs leading-relaxed text-slate-400 md:line-clamp-3 md:text-sm">
+              {project?.description}
+            </p>
+
+            <div className="mt-4 flex flex-wrap gap-1.5 md:gap-2">
+              {project?.technology?.map((tech, i) => (
+                <span
+                  key={i}
+                  className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-[11px] font-medium text-slate-300"
                 >
-                  <IconBrandGithub className='size-5' />
-                </Link>
-              )}
-              {project?.server_github_link && (
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-auto flex items-center justify-between border-t border-white/[0.06] pt-3.5 md:pt-4">
+              <div className="flex gap-2">
+                {project?.client_github_link && (
+                  <Link
+                    href={project.client_github_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Client GitHub Repository"
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-white/[0.08] bg-white/[0.02] text-slate-400 transition-colors duration-200 hover:border-white/[0.15] hover:text-white"
+                  >
+                    <IconBrandGithub className="size-4" />
+                  </Link>
+                )}
+                {project?.server_github_link && (
+                  <Link
+                    href={project.server_github_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Server GitHub Repository"
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-white/[0.08] bg-white/[0.02] text-slate-400 transition-colors duration-200 hover:border-white/[0.15] hover:text-white"
+                  >
+                    <IconServer className="size-4" />
+                  </Link>
+                )}
+              </div>
+
+              {project?.live_link && (
                 <Link
-                  href={project.server_github_link}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-slate-500 hover:text-[#03e8f4] transition-all duration-300 transform hover:scale-110'
-                  aria-label='Server GitHub Repository'
+                  href={project.live_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/btn inline-flex items-center gap-1.5 rounded-full border border-white/[0.14] bg-white/[0.05] px-3.5 py-1.5 text-[11px] font-medium text-white transition-colors duration-300 hover:border-white/[0.24] hover:bg-white/[0.08] md:px-4 md:py-2 md:text-xs"
                 >
-                  <IconServer className='size-5' />
+                  <span>Live Preview</span>
+                  <IconWorld className="size-3.5 transition-transform duration-300 group-hover/btn:rotate-12 md:size-4" />
                 </Link>
               )}
             </div>
-
-            {project?.live_link && (
-              <Link
-                href={project.live_link}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 rounded-full transition-all duration-500 font-semibold text-[10px] md:text-sm group/btn bg-white/5 text-white hover:bg-white/10 border border-white/10'
-              >
-                <span className='tracking-wide'>Live Preview</span>
-                <IconWorld className='size-3.5 md:size-4 group-hover/btn:rotate-12 transition-transform' />
-              </Link>
-            )}
           </div>
         </div>
       </div>
@@ -158,4 +135,4 @@ const Card = ({ project, onPlayVideo }: { project: any; onPlayVideo: () => void 
   );
 };
 
-export default Card;
+export default memo(Card);
