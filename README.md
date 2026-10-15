@@ -15,10 +15,10 @@ This portfolio is built using modern web technologies:
 - Framework: Next.js (App Router)
 - Language: TypeScript
 - UI & Styling: Tailwind CSS
-- Animation: GSAP + Framer motion
+- Animation: GSAP
 - Deployment: Vercel
 
-##  🧑‍💻 About Me
+## 🧑‍💻 About Me
 
 - 💼 Full-Stack Web Developer
 - ⚛️ React, Next.js, Node.js
