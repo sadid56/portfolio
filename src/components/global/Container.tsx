@@ -9,7 +9,7 @@ interface Props {
 
 const Container: React.FC<Props> = ({ children, className = "", id }) => {
   return (
-    <section id={id} className={cn("max-w-[1356px] px-4 mx-auto", className)}>
+    <section id={id} className={cn("max-w-339 px-4 mx-auto", className)}>
       {children}
     </section>
   );

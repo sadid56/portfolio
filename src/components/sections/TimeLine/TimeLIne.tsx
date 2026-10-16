@@ -5,7 +5,6 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { TExperience } from "@/types/experienceTypes";
 import React, { useRef } from "react";
 import DockText from "../../ui/DockText";
-import "./timeline.css";
 import TimelineItem from "./TimeLineItem";
 
 interface Props {
@@ -23,10 +22,11 @@ export const Timeline: React.FC<Props> = ({ data }) => {
     () => {
       const node = ref.current;
       const container = containerRef.current;
+      const progressTrack = progressContainerRef.current;
       const fill = progressFillRef.current;
       const rocket = rocketRef.current;
 
-      if (!node || !container || !fill || !rocket) return;
+      if (!node || !container || !fill || !rocket || !progressTrack) return;
 
       const prefersReduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -46,8 +46,10 @@ export const Timeline: React.FC<Props> = ({ data }) => {
 
       const isNested = Boolean(scrollParent);
       let totalDistance = 0;
+
       const measure = () => {
-        totalDistance = Math.max(0, (node.offsetHeight || 0) - 50);
+        totalDistance = Math.max(0, (node.offsetHeight || 0) - 80);
+        progressTrack.style.height = `${totalDistance}px`;
       };
       measure();
 
@@ -64,7 +66,7 @@ export const Timeline: React.FC<Props> = ({ data }) => {
           scroller: scrollParent,
           start: isNested ? "top 40%" : "top 35%",
           end: isNested ? "bottom 60%" : "bottom 65%",
-          scrub: 1.2,
+          scrub: 0.8,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             if (self.direction !== lastDirection) {
@@ -78,57 +80,72 @@ export const Timeline: React.FC<Props> = ({ data }) => {
         },
       });
 
+      // Synchronize fill scale and rocket translation 1:1 with ease "none"
       tl.to(
         fill,
         {
-          scaleY: () => (totalDistance > 0 ? 1 : 0),
+          scaleY: 1,
           duration: 1,
           ease: "none",
         },
         0,
       );
 
-      tl.fromTo(
+      tl.to(
         rocket,
-        { y: 0, opacity: 0, scale: 0.7 },
         {
           y: () => totalDistance,
-          opacity: 1,
-          scale: 1,
           duration: 1,
           ease: "none",
         },
         0,
       );
 
+      // Fade-in at start (0 to 5%) - Never animate 'scale' on fill to prevent overriding scaleY
+      tl.fromTo(
+        rocket,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.05, ease: "power1.out" },
+        0,
+      );
+      tl.fromTo(
+        fill,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.05, ease: "power1.out" },
+        0,
+      );
+
+      // Clean fade-out at end (95 to 100%)
       tl.to(
         rocket,
         {
           opacity: 0,
-          scale: 0.65,
-          duration: 0.12,
-          ease: "power2.inOut",
+          scale: 0.8,
+          duration: 0.05,
+          ease: "power1.in",
         },
-        0.88,
+        0.95,
       );
-
       tl.to(
         fill,
         {
           opacity: 0,
-          duration: 0.12,
-          ease: "power2.inOut",
+          duration: 0.05,
+          ease: "power1.in",
         },
-        0.88,
+        0.95,
       );
 
       const onRefreshInit = () => measure();
       ScrollTrigger.addEventListener("refreshInit", onRefreshInit);
 
-      const refresh = () => ScrollTrigger.refresh();
-      document.fonts?.ready.then(refresh);
+      const timer = setTimeout(() => {
+        measure();
+        ScrollTrigger.refresh();
+      }, 200);
 
       return () => {
+        clearTimeout(timer);
         ScrollTrigger.removeEventListener("refreshInit", onRefreshInit);
       };
     },
@@ -151,18 +168,22 @@ export const Timeline: React.FC<Props> = ({ data }) => {
           <TimelineItem item={item} index={index} key={item.id + index} />
         ))}
 
-        <div className="absolute left-5 lg:left-1/2 -translate-x-1/2 top-4 bottom-12 w-[2px] pointer-events-none z-0 mask-[linear-gradient(to_bottom,transparent_0%,black_60px,black_calc(100%_-_60px),transparent_100%)]">
-          <div
-            ref={progressContainerRef}
-            className="absolute inset-0 w-full bg-gradient-to-b from-transparent via-slate-700/40 to-transparent"
-          />
+        {/* Unified track container sharing the exact height as rocket travel distance */}
+        <div
+          ref={progressContainerRef}
+          className="absolute left-5 lg:left-1/2 -translate-x-1/2 top-4 w-0.5 pointer-events-none z-0"
+        >
+          {/* Background track line */}
+          <div className="absolute inset-0 w-full bg-linear-to-b from-transparent via-slate-700/40 to-transparent" />
 
+          {/* Active progress line locked 1:1 with rocket */}
           <div
             ref={progressFillRef}
-            className="absolute inset-x-0 top-0 h-full w-full origin-top bg-gradient-to-b from-sky-400/20 via-sky-400/50 to-sky-400 rounded-full"
+            className="absolute inset-x-0 top-0 h-full w-full origin-top bg-linear-to-b from-slate-600/20 via-slate-500/50 to-slate-400 rounded-full"
           />
         </div>
 
+        {/* Rocket element */}
         <div
           ref={rocketRef}
           className="absolute left-5 lg:left-1/2 -translate-x-1/2 top-4 w-12 h-12 z-20 pointer-events-none -mt-6"

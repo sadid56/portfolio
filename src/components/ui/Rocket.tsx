@@ -80,6 +80,8 @@ export const Rocket: React.FC<RocketProps> = ({ className = "" }) => {
 
       {/* Futuristic Vector Rocket SVG */}
       <svg
+        aria-hidden="true"
+        focusable="false"
         viewBox="0 0 64 64"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

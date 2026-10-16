@@ -8,18 +8,17 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
   display: "swap",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
   display: "swap",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400"],
 });
 
 const siteUrl = "https://sadidx.me";
-const defaultTitle = "Sadid | Creative Full-Stack Developer & GSAP Specialist";
+const defaultTitle = "Sadid | Let's build something amazing together ⚡";
 const defaultDescription =
   "Official portfolio of Sadid — Creative Full-Stack Web Developer and GSAP Animation Specialist. Building award-winning, interactive, high-performance web experiences with Next.js, React, Node.js, and GSAP.";
 
@@ -131,7 +130,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
   themeColor: "#020617",
 };
 
@@ -266,11 +264,20 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preload"
+          href="/hero.webp"
+          as="image"
+          type="image/webp"
+          fetchPriority="high"
+        />
+      </head>
       <body
         className={cn(
           montserrat.variable,
           poppins.variable,
-          "antialiased bg-[#010610]",
+          "antialiased bg-mainBgColor",
         )}
       >
         <script

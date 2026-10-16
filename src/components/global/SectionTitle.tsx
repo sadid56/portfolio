@@ -1,6 +1,5 @@
 "use client";
 import { gsap, useGSAP } from "@/lib/gsap";
-import styles from "@/styles/section-title.module.css";
 import { useRef } from "react";
 
 interface SectionTitleProps {
@@ -34,7 +33,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
             start: "top 88%",
             once: true,
             onEnter: () => {
-              headingRef.current?.classList.add(styles.animation);
+              headingRef.current?.classList.add("section-title-anim");
               gsap.set(ref.current, { willChange: "auto" });
             },
           },
@@ -48,7 +47,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
     <div ref={ref} className="relative">
       <h2
         ref={headingRef}
-        className={`flex ${lineBreak ? "flex-col" : ""} gap-2 text-3xl md:text-5xl font-semibold font-montserrat bg-gradient-to-r from-white/50 via-slate-300 to-slate-600 bg-clip-text text-transparent`}
+        className={`flex ${lineBreak ? "flex-col" : ""} gap-2 text-3xl md:text-5xl font-semibold font-montserrat bg-linear-to-r from-white/50 via-slate-300 to-slate-600 bg-clip-text text-transparent`}
       >
         <span>{color}</span>
         <span className="text-slate-300">{text}</span>

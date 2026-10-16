@@ -2,9 +2,9 @@
 
 import Container from "@/components/global/Container";
 import { IconBrandLinux } from "@/components/icons";
-import { FlipWords } from "@/components/ui/FlipWords";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { IconBrandNextjs, IconBrandTypescript } from "@tabler/icons-react";
+import Image from "next/image";
 import { useRef } from "react";
 import Experience from "../Experience/Experience";
 
@@ -18,7 +18,7 @@ const D_PATH =
 const O_PATH =
   "M 2 50 C 2 23.5, 23.5 2, 50 2 C 76.5 2, 98 23.5, 98 50 C 98 76.5, 76.5 98, 50 98 C 23.5 98, 2 76.5, 2 50 C 2 50, 2 50, 2 50 Z M 24 50 C 24 35.6, 35.6 24, 50 24 C 64.4 24, 76 35.6, 76 50 C 76 64.4, 64.4 76, 50 76 C 35.6 76, 24 64.4, 24 50 C 24 50, 24 50, 24 50 Z";
 
-const PORTRAIT_URL = "https://cdn.sadidx.me/portfolio/common/hero.png";
+const PORTRAIT_URL = "/hero.webp";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,25 +28,11 @@ const Hero = () => {
   const revealRef = useRef<HTMLDivElement>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
 
-  const words = [
-    "Software developer",
-    "Web developer",
-    "Full stack developer",
-    "React developer",
-  ];
-
   useGSAP(
     () => {
       ScrollTrigger.config({ ignoreMobileResize: true });
 
       const mm = gsap.matchMedia();
-      let cancelled = false;
-
-      const img = new Image();
-      img.src = PORTRAIT_URL;
-      img.onload = () => {
-        if (!cancelled) ScrollTrigger.refresh();
-      };
 
       const prefersReduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -59,8 +45,6 @@ const Hero = () => {
         if (expContent)
           gsap.set(expContent, { clearProps: "transform,opacity,willChange" });
         return () => {
-          cancelled = true;
-          img.onload = null;
           mm.revert();
         };
       }
@@ -287,8 +271,6 @@ const Hero = () => {
       });
 
       return () => {
-        cancelled = true;
-        img.onload = null;
         mm.revert();
       };
     },
@@ -301,37 +283,56 @@ const Hero = () => {
       ref={containerRef}
       className="relative h-screen overflow-hidden"
     >
-      <div className="pointer-events-none hidden lg:block absolute inset-0 z-20 blur-target">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none hidden lg:block absolute inset-0 z-20 blur-target"
+      >
         <IconBrandLinux className="floating-icon absolute top-[18%] right-[28%] w-9 h-9 text-slate-200/70 drop-shadow-[0_0_10px_rgba(203,213,225,0.25)]" />
         <IconBrandNextjs className="floating-icon absolute bottom-28 left-[35%] w-10 h-10 text-slate-200/70" />
         <IconBrandTypescript className="floating-icon absolute top-[18%] md:top-[22%] right-[5%] w-9 h-9 text-blue-300/70" />
       </div>
 
-      <div className="absolute hidden lg:block inset-0 z-0 blur-target">
-        <div className="absolute -top-20 -right-20 w-[24rem] h-[24rem] bg-linear-to-br from-cyan-300/8 via-blue-400/6 to-transparent rounded-full blur-3xl float-slow" />
+      <div
+        className="absolute hidden lg:block inset-0 z-0 blur-target"
+        aria-hidden="true"
+      >
+        <div className="absolute -top-20 -right-20 w-96 h-96 bg-linear-to-br from-cyan-300/8 via-blue-400/6 to-transparent rounded-full blur-3xl float-slow" />
       </div>
-      <div className="absolute inset-0 z-0 blur-target bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(ellipse_70%_60%_at_20%_50%,black_30%,transparent_100%)]" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 blur-target bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(ellipse_70%_60%_at_20%_50%,black_30%,transparent_100%)]"
+      />
 
       <div
         ref={portraitRef}
+        aria-hidden="true"
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
       >
         {/* Mobile Portrait Overlay: Centered, smooth bottom fade behind SADID text */}
         <div
-          className="block md:hidden absolute left-1/2 -translate-x-1/2 bottom-[26%] sm:bottom-[28%] w-[92vw] max-w-[420px] aspect-square bg-no-repeat bg-center bg-contain opacity-25"
+          className="block md:hidden absolute left-1/2 -translate-x-1/2 bottom-[26%] sm:bottom-[28%] w-[92vw] max-w-105 aspect-square opacity-25 pointer-events-none"
           style={{
-            backgroundImage: `url('${PORTRAIT_URL}')`,
             maskImage:
               "radial-gradient(ellipse 75% 62% at 50% 40%, black 30%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.2) 75%, transparent 92%)",
             WebkitMaskImage:
               "radial-gradient(ellipse 75% 62% at 50% 40%, black 30%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.2) 75%, transparent 92%)",
             filter: "grayscale(100%) brightness(1.4) contrast(1.1)",
           }}
-        />
+        >
+          <Image
+            src={PORTRAIT_URL}
+            alt=""
+            priority
+            fetchPriority="high"
+            width={420}
+            height={420}
+            className="w-full h-full object-contain pointer-events-none"
+          />
+        </div>
 
         {/* Desktop Portrait Overlay */}
         <div
-          className="hidden md:block absolute md:right-[35%] lg:right-[38%] 2xl:right-[42%] md:-bottom-[10%] w-full max-w-[850px] lg:max-w-[1000px] 2xl:max-w-[1200px] h-[120%] max-h-[850px] lg:max-h-[950px] 2xl:max-h-[1050px] bg-no-repeat bg-bottom-right bg-contain opacity-20 md:opacity-15 lg:opacity-13"
+          className="hidden md:block absolute md:right-[35%] lg:right-[38%] 2xl:right-[42%] md:bottom-[-10%] w-full max-w-212.5 lg:max-w-250 2xl:max-w-300 h-[120%] max-h-212.5 lg:max-h-237.5 2xl:max-h-262.5 bg-no-repeat bg-bottom-right bg-contain opacity-20 md:opacity-15 lg:opacity-13"
           style={{
             backgroundImage: `url('${PORTRAIT_URL}')`,
             maskImage:
@@ -345,9 +346,12 @@ const Hero = () => {
         />
       </div>
 
-      <Container className="relative z-30 pb-10 md:pb-10 lg:pb-12 pr-6 md:pr-12 lg:pr-20 2xl:pr-28 w-full max-w-[1400px] 2xl:max-w-[1850px] 3xl:max-w-[2200px] h-full flex flex-col justify-end items-end text-right">
+      <Container className="relative z-30 pb-10 md:pb-10 lg:pb-12 pr-6 md:pr-12 lg:pr-20 2xl:pr-28 w-full max-w-350 2xl:max-w-462.5 3xl:max-w-550 h-full flex flex-col justify-end items-end text-right">
         <div ref={nameRef} className="mb-3 md:mb-4">
-          <h1 className="text-[70px] sm:text-[80px] leading-[90%] md:text-[130px] lg:text-[150px] xl:text-[210px] font-montserrat uppercase font-black select-none flex items-center justify-end">
+          <h1
+            aria-label="Sadid"
+            className="text-[70px] sm:text-[80px] leading-[90%] md:text-[130px] lg:text-[150px] xl:text-[210px] font-montserrat uppercase font-black select-none flex items-center justify-end"
+          >
             <span className="hero-letter inline-block mx-1 bg-linear-to-r from-white via-slate-300 to-slate-400 bg-clip-text text-transparent cursor-default">
               S
             </span>
@@ -366,6 +370,8 @@ const Hero = () => {
               }}
             >
               <svg
+                aria-hidden="true"
+                focusable="false"
                 viewBox="0 0 100 100"
                 className="w-full h-full overflow-visible"
                 fill="none"
@@ -403,24 +409,24 @@ const Hero = () => {
           </h1>
         </div>
 
-        <div className="text-slate-300 font-poppins font-normal max-w-[700px] mb-0 GradualSpacing">
-          Passionate <FlipWords words={words} /> specializing in React, Next.js,
-          Node.js, PostgreSQL, and TypeScript, with a strong focus on clean
-          code, scalability, and continuous learning.
+        <div className="text-slate-300 font-poppins font-normal max-w-170 text-sm sm:text-base leading-relaxed mb-0 GradualSpacing">
+          Passionate developer who genuinely loves coding and building new
+          things. Turning creative ideas into reality and crafting smooth
+          digital experiences is both my passion and my favorite hobby.
         </div>
       </Container>
 
       <div
         ref={revealRef}
         data-scroll-parent
-        className="hidden lg:block lg:absolute lg:inset-0 z-50 bg-mainBgColor lg:overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:[clip-path:circle(0%_at_50%_50%)]"
+        className="hidden lg:block lg:absolute lg:inset-0 z-50 bg-mainBgColor lg:overflow-hidden scrollbar-none [&::-webkit-scrollbar]:hidden lg:[clip-path:circle(0%_at_50%_50%)]"
       >
         <div ref={experienceContentRef} className="w-full lg:min-h-full">
           <Experience />
         </div>
       </div>
 
-      <div className="fixed right-5 bottom-8 z-40 pointer-events-none hidden md:flex flex-col items-center gap-2.5 select-none opacity-70 hover:opacity-100 transition-opacity">
+      <div className="absolute right-5 bottom-8 z-40 pointer-events-none hidden md:flex flex-col items-center gap-2.5 select-none opacity-70 hover:opacity-100 transition-opacity">
         <span className="text-[9px] uppercase text-slate-400 [writing-mode:vertical-rl] rotate-180">
           SCROLL
         </span>

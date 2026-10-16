@@ -48,83 +48,53 @@
   background: linear-gradient(transparent, white);
 }
 
-@keyframes mouseWheel {
-  0% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  30% {
-    opacity: 1;
-    transform: translateY(4px);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(8px);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
+.section-title-anim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  overflow: hidden;
 }
 
-.animate-mouseWheel {
-  animation: mouseWheel 1.5s ease-in-out infinite;
+.section-title-anim span {
+  letter-spacing: 0.1rem;
+  transition: 0.3s;
+  box-sizing: border-box;
+  position: relative;
+  background: inherit;
 }
 
-
-@keyframes borderShine {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.section-title-anim span::before,
+.section-title-anim:focus span::before {
+  animation: chitchat linear both 1.2s;
+  box-sizing: border-box;
+  position: absolute;
+  content: "";
+  background: inherit;
 }
 
-.group:hover .animate-borderShine {
-  animation: borderShine 2s linear infinite;
-}
-
-.animate-borderShine {
-  animation: none;
-}
-
-
-
-.hamburger {
-  cursor: pointer;
-}
-
-.hamburger input {
-  display: none;
-}
-
-.hamburger svg {
-  /* The size of the SVG defines the overall size */
-  height: 3em;
-  /* Define the transition for transforming the SVG */
-  transition: transform 1200ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.line {
-  fill: none;
-  stroke: white;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 3;
-  /* Define the transition for transforming the Stroke */
-  transition:
-    stroke-dasharray 1200ms cubic-bezier(0.4, 0, 0.2, 1),
-    stroke-dashoffset 1200ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.line-top-bottom {
-  stroke-dasharray: 12 63;
-}
-
-.hamburger input:checked + svg {
-  transform: rotate(-45deg);
-}
-
-.hamburger input:checked + svg .line-top-bottom {
-  stroke-dasharray: 20 300;
-  stroke-dashoffset: -32.42;
+@keyframes chitchat {
+  0% { content: "#"; }
+  5% { content: "."; }
+  10% { content: "_"; }
+  15% { content: "-!"; }
+  20% { content: "$_"; }
+  25% { content: "№:0"; }
+  30% { content: "_"; }
+  35% { content: "-?"; }
+  40% { content: ".."; }
+  45% { content: "=.,^!"; }
+  50% { content: "S"; }
+  55% { content: "A"; }
+  60% { content: "D"; right: 0; }
+  65% { content: "I"; right: 0; }
+  70% { content: "D"; right: 0; }
+  75% { content: "'1_0<"; right: 0; }
+  80% { content: "56"; right: 0; }
+  85% { content: "r'"; right: 0; }
+  90% { content: "4"; right: 0; }
+  95% { content: "u"; right: 0; }
+  100% { content: ""; right: 0; }
 }
 
 @media (min-width: 768px) {

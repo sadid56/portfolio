@@ -1,8 +1,8 @@
 "use client";
+import { ScrollSmoother } from "@/lib/gsap";
+import { IconMaximize, IconMinimize, IconX } from "@tabler/icons-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { IconX, IconMaximize, IconMinimize } from "@tabler/icons-react";
-import { ScrollSmoother } from "@/lib/gsap";
 
 interface VideoModalProps {
   videoKey: string | null;
@@ -85,7 +85,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ videoKey, onClose }) => {
 
   const modalContent = (
     <div
-      className={`fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-[20px] p-4 md:p-10 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-99999 flex items-center justify-center bg-black/70 backdrop-blur-[20px] p-4 md:p-10 transition-opacity duration-300 ${
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       onClick={handleClose}
@@ -100,12 +100,14 @@ const VideoModal: React.FC<VideoModalProps> = ({ videoKey, onClose }) => {
       >
         {/* Header controls  */}
         <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-20 bg-linear-to-b from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
-          <h4 className="text-white font-montserrat font-medium text-sm md:text-base">
+          <p className="text-white font-montserrat font-medium text-sm md:text-base">
             Project Showcase
-          </h4>
+          </p>
           <div className="flex gap-2">
             <button
+              type="button"
               onClick={toggleFullscreen}
+              aria-label={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
               className="text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full cursor-pointer"
               title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
             >
@@ -116,7 +118,9 @@ const VideoModal: React.FC<VideoModalProps> = ({ videoKey, onClose }) => {
               )}
             </button>
             <button
+              type="button"
               onClick={handleClose}
+              aria-label="Close"
               className="text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full cursor-pointer"
               title="Close"
             >

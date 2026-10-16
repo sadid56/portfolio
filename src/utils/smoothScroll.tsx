@@ -20,7 +20,7 @@ export const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     smootherRef.current = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.2,
+      smooth: 1.1,
       effects: true,
       normalizeScroll: true,
       smoothTouch: 0.1,
@@ -39,11 +39,8 @@ export const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
   }, []);
 
   return (
-    <div
-      id="smooth-wrapper"
-      className="fixed inset-0 w-full h-full overflow-hidden"
-    >
-      <div id="smooth-content" className="w-full min-h-screen">
+    <div id="smooth-wrapper" className="w-full">
+      <div id="smooth-content" className="w-full">
         {children}
       </div>
     </div>

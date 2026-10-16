@@ -57,18 +57,20 @@ const Projects = () => {
 
         const cardEls = Array.from(track.children) as HTMLElement[];
 
+        // Hardware-accelerated GPU layer
+        gsap.set(track, { force3D: true });
+
         const scrollTween = gsap.to(track, {
           x: () => -((totalCards - 1) * cache.step),
           ease: "none",
           scrollTrigger: {
             trigger: container,
             start: "top top",
-            end: () => `+=${(totalCards - 1) * 600}`,
+            end: () => `+=${(totalCards - 1) * 580}`,
             pin: true,
             pinSpacing: true,
-            scrub: 0.6,
+            scrub: 0.8, // Smooth lerp momentum (inertia glide)
             anticipatePin: 1,
-            fastScrollEnd: true,
             invalidateOnRefresh: true,
             onToggle: (self) => {
               track.style.willChange = self.isActive ? "transform" : "auto";
@@ -76,33 +78,24 @@ const Projects = () => {
           },
         });
 
-        const cardTriggers: ScrollTrigger[] = [];
-
-        cardEls.forEach((card, i) => {
-          gsap.set(card, {
-            transformOrigin: "50% 50%",
-            willChange: "transform, opacity",
-          });
-
-          const st = ScrollTrigger.create({
-            trigger: card,
-            containerAnimation: scrollTween,
-            start: "left 95%",
-            end: "left 45%",
-            scrub: 0.4,
-            onUpdate: (self) => {
-              const p = self.progress;
-              const eased = 1 - Math.pow(1 - p, 3);
-              card.style.opacity = String(0.25 + eased * 0.75);
-              card.style.transform = `scale(${0.92 + eased * 0.08})`;
+        // Smooth lerped card transitions
+        const cardTweens = cardEls.map((card) => {
+          return gsap.fromTo(
+            card,
+            { opacity: 0.35, scale: 0.94, force3D: true },
+            {
+              opacity: 1,
+              scale: 1,
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: card,
+                containerAnimation: scrollTween,
+                start: "left 92%",
+                end: "left 50%",
+                scrub: 0.5,
+              },
             },
-            onLeave: () => {
-              card.style.opacity = "1";
-              card.style.transform = "scale(1)";
-            },
-          });
-
-          cardTriggers.push(st);
+          );
         });
 
         const onRefresh = () => {
@@ -116,17 +109,12 @@ const Projects = () => {
         const timer = window.setTimeout(() => {
           onRefresh();
           ScrollTrigger.refresh();
-        }, 250);
+        }, 200);
 
         return () => {
           window.clearTimeout(timer);
           ScrollTrigger.removeEventListener("refreshInit", onRefresh);
-          cardTriggers.forEach((st) => st.kill());
-          cardEls.forEach((card) => {
-            card.style.opacity = "";
-            card.style.transform = "";
-            card.style.willChange = "";
-          });
+          cardTweens.forEach((t) => t.kill());
           scrollTween.kill();
           track.style.paddingLeft = "";
           track.style.paddingRight = "";
@@ -183,7 +171,7 @@ const Projects = () => {
           {projects.map((card, idx) => (
             <div
               key={idx}
-              className="w-[90vw] md:w-[850px] max-w-[850px] h-[360px] shrink-0"
+              className="w-[90vw] md:w-212.5 max-w-212.5 h-90 shrink-0"
             >
               <Card project={card} onPlayVideo={handlePlayVideo} />
             </div>

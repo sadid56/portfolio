@@ -8,6 +8,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { memo, useCallback } from "react";
+import TechBadge from "@/components/ui/TechBadge";
+import BaseCard from "@/components/ui/BaseCard";
 
 export interface ProjectItem {
   id?: number;
@@ -40,17 +42,14 @@ const Card = ({ project, onPlayVideo }: CardProps) => {
   }, [onPlayVideo, project?.video_url]);
 
   return (
-    <div className="group/card relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0a0a0c]">
-      {/* Top shiny border */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-
+    <BaseCard>
       <div className="relative z-10 flex flex-1 flex-col p-4 md:p-5">
         <div className="flex flex-1 flex-col gap-4 md:flex-row md:gap-6">
           <button
             type="button"
             onClick={handlePlay}
             aria-label={`Play ${project?.project_name} video`}
-            className="group/thumb relative h-48 w-full shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] sm:h-56 md:h-full md:w-[44%]"
+            className="group/thumb relative h-48 w-full shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/8 bg-white/2 sm:h-56 md:h-full md:w-[44%]"
           >
             <Image
               src={project?.project_thumnail}
@@ -60,11 +59,11 @@ const Card = ({ project, onPlayVideo }: CardProps) => {
               className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/thumb:scale-[1.04]"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
 
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/15 backdrop-blur-md transition-all duration-300 group-hover/thumb:scale-110 group-hover/thumb:bg-white/25 md:h-14 md:w-14">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/25 to-transparent" />
+                <div className="absolute inset-0 rounded-full bg-linear-to-br from-white/25 to-transparent" />
                 <IconPlayerPlayFilled className="relative ml-0.5 size-4 fill-white text-white md:size-5" />
               </div>
             </div>
@@ -81,24 +80,19 @@ const Card = ({ project, onPlayVideo }: CardProps) => {
 
             <div className="mt-4 flex flex-wrap gap-1.5 md:gap-2">
               {project?.technology?.map((tech, i) => (
-                <span
-                  key={i}
-                  className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-[11px] font-medium text-slate-300"
-                >
-                  {tech}
-                </span>
+                <TechBadge key={i} name={tech} />
               ))}
             </div>
 
-            <div className="mt-auto flex items-center justify-between border-t border-white/[0.06] pt-3.5 md:pt-4">
+            <div className="mt-auto flex items-center justify-between border-t border-white/6 pt-3.5 md:pt-4">
               <div className="flex gap-2">
                 {project?.client_github_link && (
                   <Link
                     href={project.client_github_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Client GitHub Repository"
-                    className="flex h-8 w-8 items-center justify-center rounded-md border border-white/[0.08] bg-white/[0.02] text-slate-400 transition-colors duration-200 hover:border-white/[0.15] hover:text-white"
+                    aria-label={`${project.project_name} Client GitHub Repository`}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-white/8 bg-white/2 text-slate-400 transition-colors duration-200 hover:border-white/15 hover:text-white"
                   >
                     <IconBrandGithub className="size-4" />
                   </Link>
@@ -108,8 +102,8 @@ const Card = ({ project, onPlayVideo }: CardProps) => {
                     href={project.server_github_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Server GitHub Repository"
-                    className="flex h-8 w-8 items-center justify-center rounded-md border border-white/[0.08] bg-white/[0.02] text-slate-400 transition-colors duration-200 hover:border-white/[0.15] hover:text-white"
+                    aria-label={`${project.project_name} Server GitHub Repository`}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-white/8 bg-white/2 text-slate-400 transition-colors duration-200 hover:border-white/15 hover:text-white"
                   >
                     <IconServer className="size-4" />
                   </Link>
@@ -121,7 +115,8 @@ const Card = ({ project, onPlayVideo }: CardProps) => {
                   href={project.live_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group/btn inline-flex items-center gap-1.5 rounded-full border border-white/[0.14] bg-white/[0.05] px-3.5 py-1.5 text-[11px] font-medium text-white transition-colors duration-300 hover:border-white/[0.24] hover:bg-white/[0.08] md:px-4 md:py-2 md:text-xs"
+                  aria-label={`${project.project_name} Live Preview`}
+                  className="group/btn inline-flex items-center gap-1.5 rounded-full border border-white/14 bg-white/5 px-3.5 py-1.5 text-[11px] font-medium text-white transition-colors duration-300 hover:border-white/24 hover:bg-white/8 md:px-4 md:py-2 md:text-xs"
                 >
                   <span>Live Preview</span>
                   <IconWorld className="size-3.5 transition-transform duration-300 group-hover/btn:rotate-12 md:size-4" />
@@ -131,7 +126,7 @@ const Card = ({ project, onPlayVideo }: CardProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </BaseCard>
   );
 };
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const NotFoundPage = () => {
   return (
-    <main className="relative min-h-screen bg-[#010610] text-slate-100 flex items-center justify-center px-6 overflow-hidden selection:bg-[#03e9f4]/20 selection:text-[#03e9f4]">
+    <main className="relative min-h-screen bg-mainBgColor text-slate-100 flex items-center justify-center px-6 overflow-hidden selection:bg-primary/20 selection:text-primary">
       {/* Subtle grid pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -16,7 +16,7 @@ const NotFoundPage = () => {
 
       <div className="relative z-10 max-w-lg w-full text-center flex flex-col items-center">
         {/* Minimal 404 Display */}
-        <h1 className="text-8xl sm:text-9xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white/80 to-white/10 select-none mb-4">
+        <h1 className="text-8xl sm:text-9xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white via-white/80 to-white/10 select-none mb-4">
           404
         </h1>
         <p className="text-sm sm:text-base text-slate-400 max-w-md font-light leading-relaxed mb-10">
@@ -38,7 +38,7 @@ const NotFoundPage = () => {
           </Link>
           <Link
             href="/#projects"
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white font-medium text-sm transition-all duration-300 active:scale-95"
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white/4 hover:bg-white/8 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white font-medium text-sm transition-all duration-300 active:scale-95"
           >
             View Projects
             <IconArrowUpRight
