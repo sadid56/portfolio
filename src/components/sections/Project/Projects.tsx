@@ -66,11 +66,11 @@ const Projects = () => {
           scrollTrigger: {
             trigger: container,
             start: "top top",
-            end: () => `+=${(totalCards - 1) * 580}`,
+            end: () => `+=${(totalCards - 1) * 550}`,
             pin: true,
             pinSpacing: true,
-            scrub: 0.8, // Smooth lerp momentum (inertia glide)
-            anticipatePin: 1,
+            scrub: 0.3, // Responsive & light — relies on Lenis for buttery smoothness without double-lag
+            anticipatePin: 0,
             invalidateOnRefresh: true,
             onToggle: (self) => {
               track.style.willChange = self.isActive ? "transform" : "auto";
@@ -82,7 +82,7 @@ const Projects = () => {
         const cardTweens = cardEls.map((card) => {
           return gsap.fromTo(
             card,
-            { opacity: 0.35, scale: 0.94, force3D: true },
+            { opacity: 0.4, scale: 0.96, force3D: true },
             {
               opacity: 1,
               scale: 1,
@@ -91,8 +91,8 @@ const Projects = () => {
                 trigger: card,
                 containerAnimation: scrollTween,
                 start: "left 92%",
-                end: "left 50%",
-                scrub: 0.5,
+                end: "left 55%",
+                scrub: true,
               },
             },
           );
@@ -154,19 +154,17 @@ const Projects = () => {
   return (
     <div
       id="projects"
-      className="relative w-full overflow-hidden pt-8 md:pt-0 pb-12 md:pb-0"
+      ref={containerRef}
+      className="relative w-full h-auto md:h-screen overflow-hidden flex flex-col justify-center pt-8 md:pt-0 pb-12 md:pb-0"
     >
-      <Container className="relative z-10">
+      <Container className="relative z-10 mb-8 md:mb-14 lg:mb-16">
         <SectionTitle text="Projects_" color="My" />
       </Container>
 
-      <div
-        ref={containerRef}
-        className="relative h-auto md:h-screen overflow-visible md:overflow-hidden pt-6 md:pt-0 flex flex-col justify-center"
-      >
+      <div className="relative overflow-visible md:overflow-hidden flex flex-col justify-center">
         <div
           ref={trackRef}
-          className="project-track flex flex-col md:flex-row items-center h-full w-full md:w-fit gap-8 md:gap-10 pb-20 md:pb-0 px-4 md:px-0"
+          className="project-track flex flex-col md:flex-row items-center w-full md:w-fit gap-8 md:gap-10 pb-20 md:pb-0 px-4 md:px-0"
         >
           {projects.map((card, idx) => (
             <div

@@ -1,50 +1,48 @@
 "use client";
 
-import { ScrollSmoother, ScrollTrigger } from "@/lib/gsap";
-import { useGSAP } from "@gsap/react";
-import React, { useRef } from "react";
+import { ScrollTrigger } from "@/lib/gsap";
+import Lenis from "lenis";
+import React, { useEffect, useRef } from "react";
+import "lenis/dist/lenis.css";
+
+let lenisInstance: Lenis | null = null;
+
+export const getLenis = (): Lenis | null => lenisInstance;
 
 interface SmoothScrollProps {
   children: React.ReactNode;
 }
 
 export const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
-  const smootherRef = useRef<ScrollSmoother | null>(null);
+  const lenisRef = useRef<Lenis | null>(null);
 
-  useGSAP(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReduced) return;
-
-    smootherRef.current = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.1,
-      effects: true,
-      normalizeScroll: true,
-      smoothTouch: 0.1,
-      ignoreMobileResize: true,
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.15,
+      touchMultiplier: 1.5,
+      autoRaf: true, // Native RAF loop handled by Lenis
+      respectReducedMotion: true,
     });
 
-    const refresh = () => ScrollTrigger.refresh();
-    document.fonts?.ready.then(refresh);
-    window.addEventListener("load", refresh);
+    lenisRef.current = lenis;
+    lenisInstance = lenis;
+
+    // Sync Lenis scroll position with GSAP ScrollTrigger to eliminate pin snapping
+    lenis.on("scroll", ScrollTrigger.update);
 
     return () => {
-      window.removeEventListener("load", refresh);
-      smootherRef.current?.kill();
-      smootherRef.current = null;
+      lenis.destroy();
+      lenisRef.current = null;
+      lenisInstance = null;
     };
   }, []);
 
-  return (
-    <div id="smooth-wrapper" className="w-full">
-      <div id="smooth-content" className="w-full">
-        {children}
-      </div>
-    </div>
-  );
+  return <>{children}</>;
 };
 
 export default SmoothScroll;

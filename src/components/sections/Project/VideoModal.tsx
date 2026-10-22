@@ -1,5 +1,6 @@
 "use client";
-import { ScrollSmoother } from "@/lib/gsap";
+
+import { getLenis } from "@/utils/smoothScroll";
 import { IconMaximize, IconMinimize, IconX } from "@tabler/icons-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -37,7 +38,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ videoKey, onClose }) => {
     }
   }, []);
 
-  // Lock background scroll and pause ScrollSmoother when modal is open
+  // Lock background scroll and pause smooth scroll when modal is open
   useEffect(() => {
     if (!videoKey) {
       setIsOpen(false);
@@ -45,10 +46,8 @@ const VideoModal: React.FC<VideoModalProps> = ({ videoKey, onClose }) => {
     }
 
     const animTimer = requestAnimationFrame(() => setIsOpen(true));
-    let smoother: any = null;
     try {
-      smoother = ScrollSmoother.get();
-      if (smoother) smoother.paused(true);
+      getLenis()?.stop();
     } catch {}
 
     const prevOverflow = document.body.style.overflow;
@@ -65,7 +64,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ videoKey, onClose }) => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = prevOverflow;
       try {
-        if (smoother) smoother.paused(false);
+        getLenis()?.start();
       } catch {}
       if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     };
@@ -85,6 +84,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ videoKey, onClose }) => {
 
   const modalContent = (
     <div
+      data-lenis-prevent
       className={`fixed inset-0 z-99999 flex items-center justify-center bg-black/70 backdrop-blur-[20px] p-4 md:p-10 transition-opacity duration-300 ${
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
