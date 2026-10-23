@@ -89,10 +89,16 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: [
       {
-        url: "/logo.png",
-        width: 1200,
-        height: 630,
+        url: "/sadid.png",
+        width: 500,
+        height: 500,
         alt: "Sadid - Creative Full-Stack Developer & GSAP Specialist",
+      },
+      {
+        url: "/logo.png",
+        width: 1024,
+        height: 1024,
+        alt: "Sadid Portfolio Brand Logo",
       },
     ],
   },
@@ -100,7 +106,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: defaultTitle,
     description: defaultDescription,
-    images: ["/logo.png"],
+    images: ["/sadid.png"],
     creator: "@sadid56",
   },
   robots: {
@@ -142,137 +148,42 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebSite",
-        "@id": `${siteUrl}/#website`,
-        url: siteUrl,
-        name: "Sadid - Creative Full-Stack Developer & GSAP Specialist",
-        alternateName: [
-          "Sadid",
-          "Sadid Portfolio",
-          "Best GSAP Website",
-          "Sadid Hasan Website",
-          "Sadid Web Developer",
-        ],
-        description:
-          "The official portfolio of Sadid — Award-worthy creative full-stack web developer and GSAP animation specialist crafting ultra-smooth interactive web experiences.",
-        inLanguage: "en-US",
-        publisher: {
-          "@id": `${siteUrl}/#person`,
-        },
-      },
-      {
         "@type": "ProfilePage",
         "@id": `${siteUrl}/#profilepage`,
         url: siteUrl,
-        name: "Sadid | Portfolio & Creative Developer Profile",
-        isPartOf: {
-          "@id": `${siteUrl}/#website`,
-        },
-        about: {
-          "@id": `${siteUrl}/#person`,
-        },
+        name: "Sadid Portfolio",
         mainEntity: {
+          "@type": "Person",
           "@id": `${siteUrl}/#person`,
-        },
-        description:
-          "Explore the projects, skills, animations, and journey of Sadid, a top creative full-stack developer specializing in GSAP and Next.js.",
-      },
-      {
-        "@type": "Person",
-        "@id": `${siteUrl}/#person`,
-        name: "Sadid",
-        alternateName: ["Sadid Hasan", "mr-sadid", "sadid56", "Dream Coder"],
-        url: siteUrl,
-        image: {
-          "@type": "ImageObject",
-          "@id": `${siteUrl}/#image`,
-          url: `${siteUrl}/logo.png`,
-          caption: "Sadid - Creative Full-Stack Developer",
-        },
-        jobTitle: "Creative Full-Stack Web Developer & GSAP Specialist",
-        description:
-          "Sadid is a creative full-stack web developer and GSAP animation specialist recognized for building award-worthy interactive websites, high-performance web applications with Next.js, React, Node.js, and silky-smooth GSAP animations.",
-        gender: "Male",
-        nationality: {
-          "@type": "Country",
-          name: "Bangladesh",
-        },
-        hasOccupation: {
-          "@type": "Occupation",
-          name: "Creative Full-Stack Web Developer",
-          occupationLocation: {
-            "@type": "Country",
-            name: "Bangladesh",
+          name: "Sadid",
+          alternateName: ["Sadid Hasan", "mr-sadid", "sadid56"],
+          url: siteUrl,
+          image: {
+            "@type": "ImageObject",
+            url: `${siteUrl}/sadid.png`,
+            caption: "Sadid - Creative Full-Stack Web Developer",
           },
-          skills:
-            "Next.js, React, TypeScript, GSAP (GreenSock), ScrollTrigger, ScrollSmoother, Node.js, Express, PostgreSQL, Tailwind CSS, Web Performance",
+          jobTitle: "Creative Full-Stack Web Developer & GSAP Specialist",
+          description: defaultDescription,
+          sameAs: [
+            "https://github.com/sadid56",
+            "https://www.linkedin.com/in/mr-sadid/",
+            "https://www.facebook.com/sadidhasanx/",
+          ],
         },
-        knowsAbout: [
-          "GSAP (GreenSock Animation Platform)",
-          "GSAP ScrollTrigger",
-          "GSAP ScrollSmoother",
-          "Creative Web Development",
-          "Interactive Web Design",
-          "Next.js",
-          "React",
-          "TypeScript",
-          "Node.js",
-          "PostgreSQL",
-          "Smooth Scrolling",
-          "Frontend Engineering",
-          "Full Stack Web Development",
-          "UI/UX Design",
-          "Web Performance Optimization",
-          "Award-Winning Web Experiences",
-        ],
-        sameAs: [
-          "https://github.com/sadid56",
-          "https://www.linkedin.com/in/mr-sadid/",
-          "https://www.facebook.com/sadidhasanx/",
-        ],
       },
       {
-        "@type": "CreativeWork",
-        "@id": `${siteUrl}/#portfolio`,
-        name: "Sadid Portfolio Website",
-        headline: "Best GSAP Website & Interactive Developer Portfolio",
-        description:
-          "An interactive, award-winning style developer portfolio built with Next.js, TypeScript, and high-performance GSAP ScrollTrigger animations.",
-        author: {
-          "@id": `${siteUrl}/#person`,
-        },
-        creator: {
-          "@id": `${siteUrl}/#person`,
-        },
-        genre: [
-          "Creative Portfolio",
-          "Interactive Web Design",
-          "GSAP Showcase",
-        ],
-        keywords: [
-          "best website",
-          "best gsap website",
-          "creative developer",
-          "interactive web design",
-          "award winning portfolio",
-          "sadid",
-          "sadid hasan",
-        ],
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        url: siteUrl,
+        name: "Sadid",
+        alternateName: ["Sadid Portfolio", "Sadid Hasan"],
       },
     ],
   };
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link
-          rel="preload"
-          href="/hero.webp"
-          as="image"
-          type="image/webp"
-          fetchPriority="high"
-        />
-      </head>
       <body
         className={cn(
           montserrat.variable,

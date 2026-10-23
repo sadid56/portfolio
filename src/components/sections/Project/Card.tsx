@@ -56,6 +56,7 @@ const Card = ({ project, onPlayVideo }: CardProps) => {
               alt={project?.project_name}
               width={800}
               height={600}
+              sizes="(max-width: 768px) 100vw, 44vw"
               className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/thumb:scale-[1.04]"
             />
 

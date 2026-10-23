@@ -18,7 +18,7 @@ const D_PATH =
 const O_PATH =
   "M 2 50 C 2 23.5, 23.5 2, 50 2 C 76.5 2, 98 23.5, 98 50 C 98 76.5, 76.5 98, 50 98 C 23.5 98, 2 76.5, 2 50 C 2 50, 2 50, 2 50 Z M 24 50 C 24 35.6, 35.6 24, 50 24 C 64.4 24, 76 35.6, 76 50 C 76 64.4, 64.4 76, 50 76 C 35.6 76, 24 64.4, 24 50 C 24 50, 24 50, 24 50 Z";
 
-const PORTRAIT_URL = "/hero.webp";
+const PORTRAIT_URL = "/sadid.webp";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -321,7 +321,8 @@ const Hero = () => {
         >
           <Image
             src={PORTRAIT_URL}
-            alt=""
+            alt="Sadid - Creative Full-Stack Web Developer"
+            title="Sadid"
             priority
             fetchPriority="high"
             width={420}
@@ -332,9 +333,8 @@ const Hero = () => {
 
         {/* Desktop Portrait Overlay */}
         <div
-          className="hidden md:block absolute md:right-[35%] lg:right-[38%] 2xl:right-[42%] md:bottom-[-10%] w-full max-w-212.5 lg:max-w-250 2xl:max-w-300 h-[120%] max-h-212.5 lg:max-h-237.5 2xl:max-h-262.5 bg-no-repeat bg-bottom-right bg-contain opacity-20 md:opacity-15 lg:opacity-13"
+          className="hidden md:block absolute md:right-[35%] lg:right-[38%] 2xl:right-[42%] md:bottom-[-10%] w-full max-w-212.5 lg:max-w-250 2xl:max-w-300 h-[120%] max-h-212.5 lg:max-h-237.5 2xl:max-h-262.5 opacity-20 md:opacity-15 lg:opacity-13 pointer-events-none"
           style={{
-            backgroundImage: `url('${PORTRAIT_URL}')`,
             maskImage:
               "linear-gradient(to left, black 20%, transparent 80%), linear-gradient(to top, black 20%, transparent 80%)",
             WebkitMaskImage:
@@ -343,7 +343,18 @@ const Hero = () => {
             WebkitMaskComposite: "source-in",
             filter: "grayscale(100%) brightness(1.5) contrast(1.1)",
           }}
-        />
+        >
+          <Image
+            src={PORTRAIT_URL}
+            alt="Sadid - Creative Full-Stack Web Developer"
+            title="Sadid"
+            priority
+            fetchPriority="high"
+            width={600}
+            height={600}
+            className="w-full h-full object-contain object-bottom-right pointer-events-none"
+          />
+        </div>
       </div>
 
       <Container className="relative z-30 pb-10 md:pb-10 lg:pb-12 pr-6 md:pr-12 lg:pr-20 2xl:pr-28 w-full max-w-350 2xl:max-w-462.5 3xl:max-w-550 h-full flex flex-col justify-end items-end text-right">
